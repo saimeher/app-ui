@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar class="primary">
+    <ion-title>Issue Register</ion-title>
+    <!--<ion-buttons end>
+      <button ion-button icon-only color="royal">
+        <ion-icon name="log-in"></ion-icon>
+      </button>
+    </ion-buttons>-->
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Mobile</ion-label>
+      <ion-input [(ngModel)]="mobile" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input [(ngModel)]="name" type="text"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding>
+    <button (click)="register()" ion-button color="primary" block>Register</button>
+  </div>
+
+
+</ion-content>

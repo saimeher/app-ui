@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Issues Detail</ion-title>
+  </ion-navbar>
+  <ion-toolbar color="secondary">
+    <ion-title>{{issue?.issue_desc}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <!--<ion-list>
+    <ion-item *ngFor="let key of keys">
+      {{key}}. {{issue[key]}}
+    </ion-item>
+  </ion-list>-->
+
+  <ion-grid *ngIf="issue">
+    <ion-row>
+      <ion-col col-4>Category</ion-col>
+      <ion-col col-8>{{issue.domain}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>Description</ion-col>
+      <ion-col col-8>{{issue.issue_desc}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>Location</ion-col>
+      <ion-col col-8>{{issue.location}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>Problem</ion-col>
+      <ion-col col-8>{{issue.problem}}</ion-col>
+    </ion-row>
+    
+    <ion-row *ngFor="let image of images">
+      <ion-col col-12>
+        <img src="{{image}}" />
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-6><button (click)="edit()" ion-button><ion-icon name="barcode"></ion-icon></button></ion-col>
+      <ion-col col-6><button (click)="delete()" ion-button><ion-icon name="trash"></ion-icon></button></ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>

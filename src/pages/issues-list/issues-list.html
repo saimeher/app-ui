@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Issues List</ion-title>
+    <ion-buttons end>
+      <button (click)="showNewIssue()" ion-button icon-only color="royal">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar color="secondary">
+    <ion-title>Pending Issues</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list *ngIf="issuesList.length > 0">
+    <button ion-item *ngFor="let issue of issuesList" (click)="issueSelected(issue)">
+      {{ issue.issue_desc }}
+    </button>
+  </ion-list>
+
+</ion-content>

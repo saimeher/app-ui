@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Issue Register</ion-title>
+    <ion-buttons end>
+      <button (click)="showRegister()" ion-button icon-only color="royal">
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <h3>Welcome to Issue Register</h3>
+  <p>Here you can log an issue and check if your registered issues have been resolved !!!</p>
+
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Mobile</ion-label>
+      <ion-input [(ngModel)]="mobile" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding>
+    <button (click)="login()" ion-button color="primary" block>Sign In</button>
+  </div>
+
+
+</ion-content>
