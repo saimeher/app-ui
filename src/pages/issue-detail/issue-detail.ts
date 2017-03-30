@@ -1,8 +1,6 @@
+import { ActionSheetController, NavController, NavParams } from 'ionic-angular';
+// import { Sim } from 'ionic-native';
 import { Component } from '@angular/core';
-import { Sim } from 'ionic-native';
-import { NavController, NavParams } from 'ionic-angular';
-import { Http } from '@angular/http';
-
 import { AppSettings } from '../app.settings';
 import { SharedService, ApiService } from '../../common/common';
 import { NewIssuePage } from '../pages';
@@ -16,8 +14,18 @@ export class IssueDetailPage {
   did;
   keys;
   images: Array<any> = [];
+  domains;
+  status;
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, private navCtrl: NavController, private navParams: NavParams) {
+  constructor(
+    private _apiService: ApiService,
+    private _sharedService: SharedService,
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController
+  ) {
+    this.domains = AppSettings.domains;
+    this.status = AppSettings.status;
   }
 
   ionViewWillEnter() {
@@ -43,8 +51,8 @@ export class IssueDetailPage {
     this.navCtrl.push(NewIssuePage, this.did);
   }
 
-  delete() {
-    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile }).subscribe(data => {
+  delete(status) {
+    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile, status: status }).subscribe(data => {
       if (data.success) {
         this._sharedService.presentToast('Issue deleted successfully');
         this.navCtrl.pop();
@@ -53,5 +61,34 @@ export class IssueDetailPage {
       }
     });
   }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Delete Issue',
+      buttons: [
+        {
+          text: 'Is your issue resolved ?',
+          role: 'destructive',
+          handler: () => {
+            this.delete('user_resolved');
+          }
+        }, {
+          text: 'Is your issue not needed anymore?',
+          role: 'destructive',          
+          handler: () => {
+            this.delete('user_deleted');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
 
 }

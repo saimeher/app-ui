@@ -28,6 +28,8 @@ export class RegisterPage {
                 this._sharedService.presentToast('User registered successfully');
                 this._sharedService.setStorage('mobile', this.mobile);
                 this._sharedService.setStorage('loggedIn', true);
+                this._sharedService.setStorage('name', this.name);
+                this._sharedService.setStorage('role', 'user');
                 this._sharedService.mobile = this.mobile;
                 this.navCtrl.popToRoot();
             } else {

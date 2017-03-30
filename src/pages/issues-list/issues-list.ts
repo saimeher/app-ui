@@ -12,6 +12,7 @@ import { IssueDetailPage, WelcomePage, NewIssuePage } from '../pages';
   templateUrl: 'issues-list.html',
 })
 export class IssuesListPage {
+  categories = [];
   issuesList = [];
   display = false;
 
@@ -30,7 +31,31 @@ export class IssuesListPage {
       .subscribe(data => {
         if (data.success) {
           console.log(JSON.stringify(data.data));
-          this.issuesList = data.data;
+          this.categories = [];
+          this.issuesList = [];
+
+          let category;
+          let categoryTitle;
+
+          data.data.forEach(item => {
+            if (item['domain'] != category) {
+
+              category = item['domain'];
+              categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
+
+              // category = item['domain'];
+              this.categories.push(categoryTitle);
+              this.issuesList[categoryTitle] = [];
+              this.issuesList[categoryTitle].push({did: item.did, issue_desc: item.issue_desc});
+            } else {
+              this.issuesList[categoryTitle].push({did: item.did, issue_desc: item.issue_desc});
+            }
+            
+          });
+
+          console.log(this.issuesList);
+          
+
         }
       });
   }

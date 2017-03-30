@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: 'welcome.html'
 })
 export class WelcomePage {
-  mobile: string = '9885721144';
+  mobile: string = '9703400284';
   password: string = '1234';
 
   constructor(public navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService) {
@@ -36,7 +36,7 @@ export class WelcomePage {
           this._sharedService.getStorage('mobile'),
           this._sharedService.getStorage('role')
         ]
-        ).subscribe(dataArray => {
+        ).subscribe(dataArray => {          
           this._sharedService.name = dataArray[0].toString();
           this._sharedService.mobile = dataArray[1].toString();
           this._sharedService.role = dataArray[2].toString();

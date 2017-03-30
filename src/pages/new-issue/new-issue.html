@@ -13,24 +13,24 @@
   <ion-list>
     <ion-item>
       <ion-label stacked>Domain</ion-label>
-      <ion-select [(ngModel)]="issue.domain">
+      <ion-select [disabled]="issue.mobile != _sharedService.mobile" [(ngModel)]="issue.domain">
         <ion-option *ngFor="let domain of domains" value="{{domain.value}}">{{domain.title}}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Issue Description</ion-label>
-      <ion-input [(ngModel)]="issue.issue_desc" type="text"></ion-input>
+      <ion-input [disabled]="issue.mobile != _sharedService.mobile" [(ngModel)]="issue.issue_desc" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Location / Serial Number</ion-label>
-      <ion-input [(ngModel)]="issue.location" type="text"></ion-input>
+      <ion-input [disabled]="issue.mobile != _sharedService.mobile" [(ngModel)]="issue.location" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Impact / Problem</ion-label>
-      <ion-input [(ngModel)]="issue.problem" type="text"></ion-input>
+      <ion-input [disabled]="issue.mobile != _sharedService.mobile" [(ngModel)]="issue.problem" type="text"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="did > 0 && _sharedService.role === 'admin'">
@@ -46,7 +46,7 @@
       <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="MMMM DD, YYYY HH:mm" [(ngModel)]="issue.repaired_on"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="did > 0 && _sharedService.role === 'admin'">
-      <ion-label stacked>Repaired By</ion-label>
+      <ion-label stacked>Assigned to</ion-label>
       <ion-input [(ngModel)]="issue.repaired_by" type="text"></ion-input>
     </ion-item>
     <ion-item *ngIf="did > 0 && _sharedService.role === 'admin'">
@@ -60,15 +60,19 @@
     <ion-item *ngIf="did > 0 && _sharedService.role === 'admin'">
       <ion-label stacked>Status</ion-label>
       <ion-select [(ngModel)]="issue.status">
-        <ion-option value="pending">Pending</ion-option>
-        <ion-option value="closed">Closed</ion-option>
-        <ion-option value="deleted">Deleted</ion-option>
+        <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option>
       </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button icon-left (click)="presentActionSheet()">
+        <ion-icon name="camera"></ion-icon>Upload Photo
+      </button>
     </ion-item>
 
   </ion-list>
 
-  <button (click)="save()" ion-button>Submit</button>
+  <button (click)="save()" ion-button block>Submit Issue</button>
 
   <ion-list *ngIf="did > 0 && editImages.length">
     <ion-item *ngFor="let image of editImages">
@@ -90,17 +94,3 @@
 
   <!--<img src="{{pathForImage(lastImage)}}" style="width: 100%">-->
 </ion-content>
-
-
-<ion-footer>
-  <ion-toolbar color="primary">
-    <ion-buttons>
-      <button ion-button icon-left (click)="presentActionSheet()">
-        <ion-icon name="camera"></ion-icon>Select Image
-      </button>
-      <!--<button ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null">
-        <ion-icon name="cloud-upload"></ion-icon>Upload
-      </button>-->
-    </ion-buttons>
-  </ion-toolbar>
-</ion-footer>

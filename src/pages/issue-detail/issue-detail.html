@@ -20,7 +20,7 @@
   <ion-grid *ngIf="issue">
     <ion-row>
       <ion-col col-4>Category</ion-col>
-      <ion-col col-8>{{issue.domain}}</ion-col>
+      <ion-col col-8>{{_sharedService.categorySearch(issue.domain, domains).title}}</ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-4>Description</ion-col>
@@ -34,18 +34,57 @@
       <ion-col col-4>Problem</ion-col>
       <ion-col col-8>{{issue.problem}}</ion-col>
     </ion-row>
-    
+    <ion-row>
+      <ion-col col-4>Status</ion-col>
+      <ion-col col-8>{{_sharedService.categorySearch(issue.status, status).title}}</ion-col>
+    </ion-row>    
+    <ion-row *ngIf="_sharedService.role === 'admin'">
+      <ion-col col-4>Raised By</ion-col>
+      <ion-col col-8>{{issue.raised_by}}</ion-col>
+    </ion-row>    
+    <ion-row *ngIf="_sharedService.role === 'admin'">
+      <ion-col col-4>Mobile</ion-col>
+      <ion-col col-8>{{issue.mobile}}</ion-col>
+    </ion-row>            
+
     <ion-row *ngFor="let image of images">
       <ion-col col-12>
         <img src="{{image}}" />
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col col-6><button (click)="edit()" ion-button><ion-icon name="barcode"></ion-icon></button></ion-col>
-      <ion-col col-6><button (click)="delete()" ion-button><ion-icon name="trash"></ion-icon></button></ion-col>
-    </ion-row>
   </ion-grid>
+
+
+
+  <ion-footer>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2>
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button clear color="light" (click)="edit()">
+
+          <ion-chip #chip1>
+            <ion-icon name="logo-buffer" color="primary"></ion-icon>
+            <ion-label>Edit</ion-label>
+          </ion-chip>
+            </button>
+
+        </ion-col>
+        <ion-col col-4>
+          <button *ngIf="issue && issue.mobile == _sharedService.mobile" ion-button clear color="light" (click)="presentActionSheet()">              
+          <ion-chip #chip2>
+              <ion-icon name="trash" color="danger"></ion-icon>
+              <ion-label>Delete</ion-label>
+          </ion-chip>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
 
 
 </ion-content>

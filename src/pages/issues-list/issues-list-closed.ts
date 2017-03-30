@@ -12,6 +12,7 @@ import { IssueDetailPage, WelcomePage, NewIssuePage } from '../pages';
   templateUrl: 'issues-list-closed.html',
 })
 export class IssuesListClosedPage {
+  categories = [];
   issuesList = [];
   display = false;
 
@@ -28,7 +29,23 @@ export class IssuesListClosedPage {
       .subscribe(data => {
         if (data.success) {
           console.log(JSON.stringify(data.data));
-          this.issuesList = data.data;
+          this.categories = [];
+          this.issuesList = [];
+
+          let category;
+          data.data.forEach(item => {
+            if (item['domain'] != category) {
+
+              category = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
+
+              // category = item['domain'];
+              this.categories.push(category);
+              this.issuesList[category] = [];
+              this.issuesList[category].push({ did: item.did, issue_desc: item.issue_desc });
+            } else {
+              this.issuesList[category].push({ did: item.did, issue_desc: item.issue_desc });
+            }
+          });
         }
       });
   }

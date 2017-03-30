@@ -23,6 +23,7 @@ export class NewIssuePage {
   did: number;
   domains: Array<{ title: string, value: string }>;
   domain;
+  status;
 
   issue: Issue = {
     domain: 'civil',
@@ -52,18 +53,8 @@ export class NewIssuePage {
     private _deviceService: DeviceService,
     private _sharedService: SharedService) {
 
-    this.domains = [
-      { title: 'Electrical', value: 'electrical' },
-      { title: 'Civil', value: 'civil' },
-      { title: 'Water Supply ', value: 'water_supply' },
-      { title: 'Sanitation', value: 'sanitation' },
-      { title: 'Carpentary', value: 'carpentary' },
-      { title: 'AC', value: 'ac' },
-      { title: 'Transportation', value: 'transportation' },
-      { title: 'Infrastructure', value: 'infrastructure' },
-      { title: 'House keeping (Cleaning, Gardening, Cattle Maintenance, Security)', value: 'house_keeping' },
-      { title: 'Miscellaneous', value: 'misc' }
-    ];
+    this.domains = AppSettings.domains;
+    this.status = AppSettings.status;
   }
 
   ionViewWillEnter() {
@@ -121,20 +112,23 @@ export class NewIssuePage {
 
   public save() {
     // remove deleted images from issue.image
-    if (this.issue.deletedImages && this.issue.deletedImages.length && this.issue.did > 0) {
+    if (this.issue.deletedImages && this.issue.deletedImages.length > 0 && this.issue.did > 0) {
       this.issue.deletedImages.split(',').forEach(item => {
         this.issue.image = this.issue.image.replace(item, '');
       });
     }
 
     // remove extra commas
-    this.issue.image = this.issue.image.replace(/[, ]+/g, ',').trim();
+    if (this.issue.image && this.issue.image.length > 0) {
+      this.issue.image = this.issue.image.replace(/[, ]+/g, ',').trim();
 
-    if (this.issue.image.substr(0, 1) == ',') {
-      this.issue.image = this.issue.image.substr(1);
-    }
-    if (this.issue.image.substr(this.issue.image.length - 1, 1) == ',') {
-      this.issue.image = this.issue.image.substr(0, this.issue.image.length - 1);
+      if (this.issue.image.substr(0, 1) == ',') {
+        this.issue.image = this.issue.image.substr(1);
+      }
+
+      if (this.issue.image.substr(this.issue.image.length - 1, 1) == ',') {
+        this.issue.image = this.issue.image.substr(0, this.issue.image.length - 1);
+      }
     }
 
     this.uploadImage();

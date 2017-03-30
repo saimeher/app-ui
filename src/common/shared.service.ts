@@ -53,4 +53,13 @@ export class SharedService {
     clearStorage() {
         this.storage.clear();
     }
+
+    // helper functions
+    categorySearch(nameKey, myArray) {
+        for (var i = 0; i < myArray.length; i++) {
+            if (myArray[i].value === nameKey) {
+                return myArray[i];
+            }
+        }
+    }
 }
