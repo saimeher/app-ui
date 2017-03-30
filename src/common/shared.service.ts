@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class SharedService {
@@ -29,12 +30,27 @@ export class SharedService {
     }
 
     getStorage(key) {
-        this.storage.ready().then(() => {
-            console.log(this.storage);
-
-            this.storage.get(key).then((val) => {
-                return val;
-            })
+        return Observable.create(observer => {
+            this.storage.ready().then(() => {
+                this.storage.get(key).then((val) => {
+                    observer.next(val);
+                    observer.complete();
+                })
+            });
         });
+
+        // return new Promise(resolve => {
+        //     this.storage.ready().then(() => {
+        //         console.log(this.storage);
+
+        //         this.storage.get(key).then((val) => {
+        //             resolve(val);
+        //         })
+        //     });
+        // });
+    }
+
+    clearStorage() {
+        this.storage.clear();
     }
 }

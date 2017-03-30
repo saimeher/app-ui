@@ -5,7 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { WelcomePage, NewIssuePage, IssuesListPage } from '../pages/pages';
-import { DeviceService } from '../common/common';
+import { DeviceService, SharedService } from '../common/common';
 
 @Component({
   templateUrl: 'app.html'
@@ -15,24 +15,16 @@ export class MyApp {
 
   // make HelloIonicPage the root (or first) page
   rootPage: any = WelcomePage;
-  pages: Array<{ title: string, component: any }>;
 
   constructor(
     public platform: Platform,
     public menu: MenuController,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private _deviceService: DeviceService
+    private _deviceService: DeviceService,
+    private _sharedService: SharedService
   ) {
     this.initializeApp();
-
-    // set our app's pages
-    this.pages = [
-      // { title: 'Hello Ionic', component: HelloIonicPage },
-      // { title: 'My First List', component: ListPage }
-      { title: 'Register an Issue', component: NewIssuePage },
-      { title: 'Issues List', component: IssuesListPage }
-    ];
   }
 
 
@@ -52,6 +44,14 @@ export class MyApp {
     this.menu.close();
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
+  }
+
+  logout() {
+    console.log("logout clicked");  
+    this.menu.close();  
+    this._sharedService.clearStorage();
+    this.nav.setRoot(WelcomePage);
+
   }
 
 

@@ -18,12 +18,14 @@ export class IssuesListPage {
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController) {
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.getIssuesList();
   }
 
   // get issues list to display as a list
   getIssuesList() {
+    console.log('mobile is', this._sharedService.mobile);
+    
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { mobile: this._sharedService.mobile, role: this._sharedService.role, type: 'pending' })
       .subscribe(data => {
         if (data.success) {

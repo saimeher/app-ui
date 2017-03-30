@@ -141,13 +141,20 @@ export class NewIssuePage {
   }
 
   insertData(body) {
-    this._apiService.callApi(AppSettings.newIssueApi, 'post', body).subscribe(data => {
+    this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
+    .subscribe(data => {
       if (data.success) {
         if (this.did) {
           this._sharedService.presentToast('Issue updated successfully');
         } else {
           this._sharedService.presentToast('Issue registered successfully');
         }
+
+        // delete images
+        // this.images.forEach(image => {
+        //   File.removeFile(this.pathForImage(image), image);
+        // });
+
         this.navCtrl.setRoot(IssuesListPage);
       }
     });

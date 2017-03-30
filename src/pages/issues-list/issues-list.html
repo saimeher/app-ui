@@ -1,5 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
+
+    <button ion-button menuToggle><ion-icon name="md-menu"></ion-icon></button>
     <ion-title>Issues List</ion-title>
     <ion-buttons end>
       <button (click)="showNewIssue()" ion-button icon-only color="royal">
@@ -13,8 +15,7 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content #content padding>
   <ion-list *ngIf="issuesList.length > 0">
     <button ion-item *ngFor="let issue of issuesList" (click)="issueSelected(issue)">
       {{ issue.issue_desc }}

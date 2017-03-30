@@ -4,6 +4,7 @@ import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { RegisterPage, IssuesTabsPage } from '../pages';
 import { ApiService, SharedService } from '../../common/common';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-welcome',
@@ -19,11 +20,30 @@ export class WelcomePage {
 
   ionViewWillEnter() {
     console.log("in ionViewWillEnter");
-    console.log(this._sharedService.getStorage('loggedIn'));
 
-    if (this._sharedService.getStorage('loggedIn')) {
-      this.navCtrl.push(IssuesTabsPage);
-    }
+    // if (this._sharedService.getStorage('loggedIn')) {
+    //   this.navCtrl.setRoot(IssuesTabsPage);
+    // }
+
+    this._sharedService.getStorage('loggedIn').subscribe(data => {
+      console.log('loggedin data is', data);
+
+      if (data == true) {
+        console.log('here');
+
+        Observable.forkJoin([
+          this._sharedService.getStorage('name'),
+          this._sharedService.getStorage('mobile'),
+          this._sharedService.getStorage('role')
+        ]
+        ).subscribe(dataArray => {
+          this._sharedService.name = dataArray[0].toString();
+          this._sharedService.mobile = dataArray[1].toString();
+          this._sharedService.role = dataArray[2].toString();
+          this.navCtrl.setRoot(IssuesTabsPage);
+        })
+      }
+    })
   }
 
   showRegister() {
@@ -35,13 +55,17 @@ export class WelcomePage {
     this._apiService.callApi(AppSettings.loginApi, 'post', body).subscribe(data => {
       if (data.success) {
         this._sharedService.setStorage('loggedIn', true);
-        this._sharedService.mobile = this.mobile;
-        this._sharedService.name = data.data[0].name;
+        this._sharedService.setStorage('mobile', this.mobile);
+        this._sharedService.setStorage('name', data.data[0].name);
+        this._sharedService.setStorage('role', data.data[0].role);
+
+        this._sharedService.name = this.mobile;
+        this._sharedService.mobile = data.data[0].name;
         this._sharedService.role = data.data[0].role;
-        console.log(this._sharedService.role);
 
         // this._sharedService.presentToast('Login successful');
-        this.navCtrl.push(IssuesTabsPage);
+        // this.navCtrl.push(IssuesTabsPage);
+        this.navCtrl.setRoot(IssuesTabsPage);
       } else {
         this._sharedService.presentToast(data.error);
       }
