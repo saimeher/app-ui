@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 // import { Sim } from 'ionic-native';
 import { NavController } from 'ionic-angular';
-import { Http } from '@angular/http';
+
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, WelcomePage, NewIssuePage } from '../pages';
+import { IssueDetailPage, NewIssuePage } from '../pages';
 
 @Component({
   selector: 'issues-list-closed',

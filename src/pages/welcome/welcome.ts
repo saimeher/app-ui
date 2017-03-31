@@ -5,6 +5,7 @@ import { AppSettings } from '../app.settings';
 import { RegisterPage, IssuesTabsPage } from '../pages';
 import { ApiService, SharedService } from '../../common/common';
 import { Observable } from 'rxjs/Observable';
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'page-welcome',
@@ -14,7 +15,7 @@ export class WelcomePage {
   mobile: string = '9703400284';
   password: string = '1234';
 
-  constructor(public navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService) {
+  constructor(public navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService, public loadingCtrl: LoadingController) {
 
   }
 
@@ -36,7 +37,7 @@ export class WelcomePage {
           this._sharedService.getStorage('mobile'),
           this._sharedService.getStorage('role')
         ]
-        ).subscribe(dataArray => {          
+        ).subscribe(dataArray => {
           this._sharedService.name = dataArray[0].toString();
           this._sharedService.mobile = dataArray[1].toString();
           this._sharedService.role = dataArray[2].toString();
@@ -52,6 +53,23 @@ export class WelcomePage {
 
   login() {
     let body = { mobile: this.mobile, password: this.password };
+    // spiner code
+    let loading = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      dismissOnPageChange: true
+    }).present();
+
+   
+
+    // setTimeout(() => {
+    //   this.navCtrl.setRoot(IssuesTabsPage);
+    // }, 1000);
+
+    // setTimeout(() => {
+    //   loading.dismiss();
+    // }, 5000);
+
     this._apiService.callApi(AppSettings.loginApi, 'post', body).subscribe(data => {
       if (data.success) {
         this._sharedService.setStorage('loggedIn', true);
@@ -71,4 +89,21 @@ export class WelcomePage {
       }
     })
   }
-}
+
+//   presentLoadingText() {
+//     let loading = this.loadingCtrl.create({
+//       spinner: 'hide',
+//       content: 'Loading Please Wait...'
+//     });
+
+//     loading.present();
+
+//     setTimeout(() => {
+//       this.navCtrl.setRoot(IssuesTabsPage);
+//     }, 1000);
+
+//     setTimeout(() => {
+//       loading.dismiss();
+//     }, 5000);
+//   }
+ }

@@ -57,7 +57,7 @@ export class NewIssuePage {
     this.status = AppSettings.status;
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     const _dateToIso = new DateToIso();
 
     this.images = [];
@@ -111,6 +111,9 @@ export class NewIssuePage {
   }
 
   public save() {
+    // Spiner Lodder
+
+
     // remove deleted images from issue.image
     if (this.issue.deletedImages && this.issue.deletedImages.length > 0 && this.issue.did > 0) {
       this.issue.deletedImages.split(',').forEach(item => {
@@ -131,27 +134,47 @@ export class NewIssuePage {
       }
     }
 
+
     this.uploadImage();
   }
 
   insertData(body) {
-    this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
-    .subscribe(data => {
-      if (data.success) {
-        if (this.did) {
-          this._sharedService.presentToast('Issue updated successfully');
-        } else {
-          this._sharedService.presentToast('Issue registered successfully');
-        }
 
-        // delete images
-        // this.images.forEach(image => {
-        //   File.removeFile(this.pathForImage(image), image);
-        // });
-
-        this.navCtrl.setRoot(IssuesListPage);
-      }
+    let load = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      dismissOnPageChange: true
     });
+
+    load.present();
+
+    this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
+      .subscribe(data => {
+        if (data.success) {
+          if (this.did) {
+            this._sharedService.presentToast('Issue updated successfully');
+          } else {
+            this._sharedService.presentToast('Issue registered successfully');
+          }
+
+          // this.loading.dismiss();
+
+          // delete images
+          // this.images.forEach(image => {
+          //   File.removeFile(this.pathForImage(image), image);
+          // });
+          // this.loading.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+          // this.navCtrl.setRoot(IssuesListPage);
+
+          // this.load.dismiss().then(() => { this.navCtrl.setRoot(IssuesListPage); });
+          load.dismiss();
+
+          this.navCtrl.push(IssuesListPage);
+
+
+        }
+      });
+
 
   }
 

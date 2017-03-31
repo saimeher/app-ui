@@ -7,7 +7,8 @@ import { NewIssuePage } from '../pages';
 
 @Component({
   selector: 'page-new-detail',
-  templateUrl: 'issue-detail.html'
+  templateUrl: 'issue-detail.html',
+
 })
 export class IssueDetailPage {
   issue;

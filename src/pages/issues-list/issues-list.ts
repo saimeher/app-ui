@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 // import { Sim } from 'ionic-native';
 import { NavController } from 'ionic-angular';
-import { Http } from '@angular/http';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, WelcomePage, NewIssuePage } from '../pages';
+import { IssueDetailPage,  NewIssuePage } from '../pages';
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'issues-list',
@@ -16,7 +16,7 @@ export class IssuesListPage {
   issuesList = [];
   display = false;
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController) {
+  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
@@ -61,8 +61,15 @@ export class IssuesListPage {
   }
 
   issueSelected(issue) {
+
     this.display = !this.display;
-    
+    // Spiner Loader
+    let loading = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      dismissOnPageChange: true
+    }).present();
+
     this.navCtrl.push(IssueDetailPage, {
       did: issue.did
     });
