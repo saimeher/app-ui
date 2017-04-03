@@ -7,6 +7,7 @@ import { AppSettings } from '../app.settings';
 import { ApiService, Issue, DeviceService, SharedService, DateToIso } from '../../common/common';
 import { IssuesListPage } from '../pages';
 
+
 declare var cordova: any;
 
 @Component({
@@ -24,12 +25,13 @@ export class NewIssuePage {
   domains: Array<{ title: string, value: string }>;
   domain;
   status;
+  reset;
 
   issue: Issue = {
-    domain: 'civil',
-    issue_desc: 'Issue Description',
-    location: 'Locationa',
-    problem: 'Problem',
+    domain: '',
+    issue_desc: '',
+    location: '',
+    problem: '',
     raised_by: this._sharedService.name,
     mobile: this._sharedService.mobile,
     role: 'role',
@@ -53,11 +55,12 @@ export class NewIssuePage {
     private _deviceService: DeviceService,
     private _sharedService: SharedService) {
 
-    this.domains = AppSettings.domains;
-    this.status = AppSettings.status;
   }
 
   ionViewDidEnter() {
+        this.domains = AppSettings.domains;
+    this.status = AppSettings.status;
+
     const _dateToIso = new DateToIso();
 
     this.images = [];
@@ -136,6 +139,16 @@ export class NewIssuePage {
 
 
     this.uploadImage();
+     this.issue.domain = '';
+    this.issue.issue_desc = '';
+   this.issue.location=  '';
+    this.issue.problem = '';
+    // raised_by: this._sharedService.name,
+    // mobile: this._sharedService.mobile,
+    // role: 'role',
+    this.issue.image= '';
+    this.issue.deletedImages= '';
+    
   }
 
   insertData(body) {
@@ -143,8 +156,8 @@ export class NewIssuePage {
     let load = this.loadingCtrl.create({
       spinner: 'hide',
       content: 'Loading Please Wait...',
-      dismissOnPageChange: true
-    });
+      // dismissOnPageChange: true
+    })
 
     load.present();
 
@@ -169,11 +182,12 @@ export class NewIssuePage {
           // this.load.dismiss().then(() => { this.navCtrl.setRoot(IssuesListPage); });
           load.dismiss();
 
-          this.navCtrl.push(IssuesListPage);
+          this.navCtrl.setRoot(IssuesListPage);
 
 
         }
       });
+
 
 
   }

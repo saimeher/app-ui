@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { AppSettings } from '../app.settings';
 import { SharedService, ApiService } from '../../common/common';
 import { NewIssuePage } from '../pages';
+import { LoadingController} from 'ionic-angular'
 
 @Component({
   selector: 'page-new-detail',
@@ -23,14 +24,22 @@ export class IssueDetailPage {
     private _sharedService: SharedService,
     private navCtrl: NavController,
     private navParams: NavParams,
-    public actionSheetCtrl: ActionSheetController
+    public actionSheetCtrl: ActionSheetController,
+    public loadingCtrl:LoadingController
   ) {
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.did = this.navParams.get('did');
+
+     let load = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      // dismissOnPageChange: true
+    })
+    load.present();
     this._apiService.callApi(AppSettings.getIssueApi, 'post', { did: this.did })
       .subscribe(data => {
         if (data.success) {
@@ -45,6 +54,8 @@ export class IssueDetailPage {
             });
           }
         }
+              load.dismiss();
+
       });
   }
 
@@ -53,6 +64,13 @@ export class IssueDetailPage {
   }
 
   delete(status) {
+     let load = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      // dismissOnPageChange: true
+    })
+    load.present();
+
     this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile, status: status }).subscribe(data => {
       if (data.success) {
         this._sharedService.presentToast('Issue deleted successfully');
@@ -60,7 +78,10 @@ export class IssueDetailPage {
       } else {
         this._sharedService.presentToast('Error: ' + data.error);
       }
+          load.dismiss();
+
     });
+
   }
 
   presentActionSheet() {

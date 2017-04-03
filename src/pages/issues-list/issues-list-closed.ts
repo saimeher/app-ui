@@ -6,6 +6,7 @@ import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
 import { IssueDetailPage, NewIssuePage } from '../pages';
+import { LoadingController }  from 'ionic-angular';
 
 @Component({
   selector: 'issues-list-closed',
@@ -16,15 +17,21 @@ export class IssuesListClosedPage {
   issuesList = [];
   display = false;
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController) {
+  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, private loadingCtrl:LoadingController) {
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.getIssuesList();
   }
 
   // get issues list to display as a list
   getIssuesList() {
+     let load = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+      // dismissOnPageChange: true
+    })
+    load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { mobile: this._sharedService.mobile, role: this._sharedService.role, type: 'closed' })
       .subscribe(data => {
         if (data.success) {
@@ -33,10 +40,12 @@ export class IssuesListClosedPage {
           this.issuesList = [];
 
           let category;
+          let categoryTitle;
+
           data.data.forEach(item => {
             if (item['domain'] != category) {
-
-              category = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
+              category = item['domain'];
+              categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
 
               // category = item['domain'];
               this.categories.push(category);
@@ -47,6 +56,7 @@ export class IssuesListClosedPage {
             }
           });
         }
+        load.dismiss();
       });
   }
 
@@ -58,6 +68,8 @@ export class IssuesListClosedPage {
   }
 
   showNewIssue() {
+    
+
     this.navCtrl.push(NewIssuePage);
   }
 

@@ -64,11 +64,11 @@ export class IssuesListPage {
 
     this.display = !this.display;
     // Spiner Loader
-    let loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      dismissOnPageChange: true
-    }).present();
+    // let loading = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   dismissOnPageChange: true
+    // }).present();
 
     this.navCtrl.push(IssueDetailPage, {
       did: issue.did

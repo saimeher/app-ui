@@ -11,6 +11,7 @@
 
 <ion-content padding>
   <ion-list>
+    
     <ion-item>
       <ion-label stacked>Domain</ion-label>
       <ion-select [disabled]="issue.mobile != _sharedService.mobile" [(ngModel)]="issue.domain">
@@ -70,11 +71,7 @@
       </button>
     </ion-item>
 
-  </ion-list>
-
-  <button (click)="save()" ion-button block>Submit Issue</button>
-
-  <ion-list *ngIf="did > 0 && editImages.length">
+     <ion-list *ngIf="did > 0 && editImages.length">
     <ion-item *ngFor="let image of editImages">
       <button ion-button icon-only (click)="removeImage(image, 'edit')">
             <ion-icon name="close"></ion-icon>
@@ -91,6 +88,13 @@
       <img src="{{pathForImage(image)}}" style="width: 100%">
     </ion-item>
   </ion-list>
+
+  </ion-list>
+
+
+  <button (click)="save()" ion-button block>Submit Issue</button>
+
+ 
 
   <!--<img src="{{pathForImage(lastImage)}}" style="width: 100%">-->
 </ion-content>

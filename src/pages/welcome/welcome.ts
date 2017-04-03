@@ -19,7 +19,7 @@ export class WelcomePage {
 
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     console.log("in ionViewWillEnter");
 
     // if (this._sharedService.getStorage('loggedIn')) {

@@ -2,11 +2,11 @@
   <ion-navbar color="primary">
     <button ion-button menuToggle><ion-icon name="md-menu"></ion-icon></button>
     <ion-title>Issues List</ion-title>
-    <ion-buttons end>
+    <!--<ion-buttons end>
       <button (click)="showNewIssue()" ion-button icon-only color="royal">
         <ion-icon name="add-circle"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons>-->
   </ion-navbar>
   <ion-toolbar color="secondary">
     <ion-title>Closed Issues</ion-title>
@@ -26,7 +26,4 @@
     <ion-item-divider color="light">{{category | uppercase}}</ion-item-divider>
     <button ion-item *ngFor="let issue of issuesList[category]"  (click)="issueSelected(issue)">{{issue.issue_desc}}</button>
   </ion-item-group>
-
-  
-
 </ion-content>
