@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
@@ -9,29 +10,36 @@ import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'page-welcome',
-  templateUrl: 'welcome.html'
+  templateUrl: 'welcome.html',
+  styles: [`
+
+        .invalid {
+            border-top: 1px dotted #ea6153;
+            border-right: 1px dotted #ea6153;
+        }
+  `]
 })
 export class WelcomePage {
-  mobile: string = '9703400284';
-  password: string = '1234';
+  loginForm: FormGroup;
+  submitAttempt = false;
+  forgotPassword = false;
 
-  constructor(public navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService, public loadingCtrl: LoadingController) {
-
+  constructor(public navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService, public loadingCtrl: LoadingController, private formBuilder: FormBuilder) {
+    this.loginForm = this.formBuilder.group({
+      mobile: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
   ionViewDidEnter() {
-    console.log("in ionViewWillEnter");
 
     // if (this._sharedService.getStorage('loggedIn')) {
     //   this.navCtrl.setRoot(IssuesTabsPage);
     // }
 
     this._sharedService.getStorage('loggedIn').subscribe(data => {
-      console.log('loggedin data is', data);
 
       if (data == true) {
-        console.log('here');
-
         Observable.forkJoin([
           this._sharedService.getStorage('name'),
           this._sharedService.getStorage('mobile'),
@@ -52,58 +60,76 @@ export class WelcomePage {
   }
 
   login() {
-    let body = { mobile: this.mobile, password: this.password };
-    // spiner code
-    let loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      dismissOnPageChange: true
-    }).present();
+    this.submitAttempt = true;
 
-   
+    if (this.loginForm.valid) {
+      let body = { mobile: this.loginForm.controls['mobile'].value, password: this.loginForm.controls['password'].value };
+      // spiner code
+      let load = this.loadingCtrl.create({
+        spinner: 'circles',
+        content: 'Loading Please Wait...',
+        dismissOnPageChange: true
+      });
+      load.present();
 
-    // setTimeout(() => {
-    //   this.navCtrl.setRoot(IssuesTabsPage);
-    // }, 1000);
+      this._apiService.callApi(AppSettings.loginApi, 'post', body).subscribe(data => {
+        if (data.success) {
+          this._sharedService.setStorage('loggedIn', true);
+          this._sharedService.setStorage('mobile', this.loginForm.controls['mobile'].value);
+          this._sharedService.setStorage('name', data.data[0].name);
+          this._sharedService.setStorage('role', data.data[0].role);
 
-    // setTimeout(() => {
-    //   loading.dismiss();
-    // }, 5000);
-
-    this._apiService.callApi(AppSettings.loginApi, 'post', body).subscribe(data => {
-      if (data.success) {
-        this._sharedService.setStorage('loggedIn', true);
-        this._sharedService.setStorage('mobile', this.mobile);
-        this._sharedService.setStorage('name', data.data[0].name);
-        this._sharedService.setStorage('role', data.data[0].role);
-
-        this._sharedService.name = this.mobile;
-        this._sharedService.mobile = data.data[0].name;
-        this._sharedService.role = data.data[0].role;
-
-        // this._sharedService.presentToast('Login successful');
-        // this.navCtrl.push(IssuesTabsPage);
-        this.navCtrl.setRoot(IssuesTabsPage);
-      } else {
-        this._sharedService.presentToast(data.error);
-      }
-    })
+          this._sharedService.name = data.data[0].name;
+          this._sharedService.mobile = this.loginForm.controls['mobile'].value;
+          this._sharedService.role = data.data[0].role;
+          this.navCtrl.setRoot(IssuesTabsPage);
+        } else {
+          this.submitAttempt = false;
+          this._sharedService.presentToast(data.error);
+          this.loginForm.patchValue({
+            mobile: '',
+            password: ''
+          })
+          load.dismiss();
+        }
+      });
+    }
   }
 
-//   presentLoadingText() {
-//     let loading = this.loadingCtrl.create({
-//       spinner: 'hide',
-//       content: 'Loading Please Wait...'
-//     });
+  showLogin() {
+    this.forgotPassword=false;
+    this.submitAttempt=false;    
+    this.loginForm.controls['password'].setValidators([Validators.required]);
+    this.loginForm.controls['password'].updateValueAndValidity();
+  }
 
-//     loading.present();
+  forgetPassword() {
+    this.submitAttempt = true;
+    this.forgotPassword = true;
+    this.loginForm.controls['password'].clearValidators();
+    this.loginForm.controls['password'].updateValueAndValidity();
 
-//     setTimeout(() => {
-//       this.navCtrl.setRoot(IssuesTabsPage);
-//     }, 1000);
+    if (this.loginForm.valid) {
+      let load = this.loadingCtrl.create({
+        spinner: 'circles',
+        content: 'Loading Please Wait...',
+      });
+      load.present();
 
-//     setTimeout(() => {
-//       loading.dismiss();
-//     }, 5000);
-//   }
- }
+      this._apiService.callApi(AppSettings.forgetPasswordApi, 'post', { mobile: this.loginForm.controls['mobile'].value }).subscribe(data => {
+        let message;
+        if (data.success) {
+          message = 'Your will receive your new password in a SMS shortly';
+        } else {
+          message = data.error;
+        }
+
+        load.dismiss();
+        this._sharedService.presentToast(message);
+        this.navCtrl.setRoot(WelcomePage);
+        this.submitAttempt = false;
+        this.forgotPassword = false;
+      });
+    }
+  }
+}

@@ -35,7 +35,7 @@ export class IssueDetailPage {
     this.did = this.navParams.get('did');
 
      let load = this.loadingCtrl.create({
-      spinner: 'hide',
+      spinner: 'circles',
       content: 'Loading Please Wait...',
       // dismissOnPageChange: true
     })

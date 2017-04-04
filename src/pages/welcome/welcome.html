@@ -15,24 +15,55 @@
   <h3>Welcome to Issue Register</h3>
   <p>Here you can log an issue and check if your registered issues have been resolved !!!</p>
 
+  <form novalidate [formGroup]="loginForm">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Mobile</ion-label>
+        <ion-input [class.invalid]="!loginForm.controls.mobile.valid && submitAttempt" formControlName="mobile" type="text"></ion-input>
+      </ion-item>
 
-  <ion-list>
+      <ion-item *ngIf="!forgotPassword">
+        <ion-label floating>Password</ion-label>
+        <ion-input [class.invalid]="!loginForm.controls.password.valid && submitAttempt" formControlName="password" type="password"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label floating>Mobile</ion-label>
-      <ion-input [(ngModel)]="mobile" type="text"></ion-input>
-    </ion-item>
+    </ion-list>
 
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="password" type="password"></ion-input>
-    </ion-item>
-
-  </ion-list>
-
-  <div padding>
-    <button ion-button full color="primary" (click)="login()">Sign In</button>
-  </div>
+    <div padding>
+      <button *ngIf="!forgotPassword" ion-button full color="primary" (click)="login()">Sign In</button>
+      <button ion-button full color="primary" (click)="forgetPassword()">Forget Password</button>
+    </div>
+  </form>
 
 
 </ion-content>
+
+
+ <ion-footer *ngIf="forgotPassword">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2>
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button clear color="light" (click)="showLogin()">
+
+          <ion-chip #chip1>
+            <ion-icon name="logo-buffer" color="primary"></ion-icon>
+            <ion-label>Login</ion-label>
+          </ion-chip>
+            </button>
+
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button clear color="light" (click)="showRegister()">              
+          <ion-chip #chip2>
+              <ion-icon name="trash" color="danger"></ion-icon>
+              <ion-label>Register</ion-label>
+          </ion-chip>
+          </button>
+        </ion-col>
+        <ion-col col-2>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>

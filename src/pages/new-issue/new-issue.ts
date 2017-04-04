@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { Camera, File, Transfer, FilePath } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
@@ -12,9 +13,16 @@ declare var cordova: any;
 
 @Component({
   selector: 'page-new-issue',
-  templateUrl: 'new-issue.html'
+  templateUrl: 'new-issue.html',
+  styles: [`
+        .invalid {
+            border-top: 1px dotted #ea6153;
+            border-right: 1px dotted #ea6153;
+        }        
+  `]
 })
 export class NewIssuePage {
+  issueForm: FormGroup;
   lastImage: string = null;
   images: Array<any> = [];
   editImages: Array<any> = [];
@@ -26,6 +34,8 @@ export class NewIssuePage {
   domain;
   status;
   reset;
+
+  submitAttempt: boolean = false;
 
   issue: Issue = {
     domain: '',
@@ -45,6 +55,7 @@ export class NewIssuePage {
   };
 
   constructor(
+    public formBuilder: FormBuilder,
     public navCtrl: NavController,
     private navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
@@ -55,10 +66,30 @@ export class NewIssuePage {
     private _deviceService: DeviceService,
     private _sharedService: SharedService) {
 
+    this.issueForm = formBuilder.group({
+      did: [''],
+      domain: ['', Validators.required],
+      issue_desc: ['', Validators.required],
+      location: ['', Validators.required],
+      problem: ['', Validators.required],
+      raised_by: [this._sharedService.name],
+      mobile: [this._sharedService.mobile],
+      status: [''],
+      priority: [''],
+      repaired_on: [''],
+      repaired_by: [''],
+      date_of_resolution: [''],
+      notes: [''],
+      role: [this._sharedService.role],
+      image: [''],
+      deletedImages: [''],
+    })
+
+
   }
 
   ionViewDidEnter() {
-        this.domains = AppSettings.domains;
+    this.domains = AppSettings.domains;
     this.status = AppSettings.status;
 
     const _dateToIso = new DateToIso();
@@ -72,7 +103,7 @@ export class NewIssuePage {
         this._apiService.callApi(AppSettings.getIssueApi, "post", { did: this.did }).subscribe(data => {
           if (data.success) {
             let temp = data.data[0];
-            this.issue = {
+            this.issueForm.patchValue({
               did: this.did,
               domain: temp.domain,
               issue_desc: temp.issue_desc,
@@ -83,20 +114,29 @@ export class NewIssuePage {
               role: this._sharedService.role,
               image: temp.image,
               deletedImages: '',
-            };
+            });
 
             if (this._sharedService.role === 'admin') {
-              this.issue.priority = temp.priority;
-              this.issue.repaired_by = temp.repaired_by;
-              this.issue.repaired_on = temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '';
-              this.issue.date_of_resolution = temp.date_of_resolution;
-              this.issue.notes = temp.notes;
-              this.issue.status = temp.status;
+              this.issueForm.patchValue({
+                priority: temp.priority,
+                repaired_by: temp.repaired_by,
+                repaired_on: temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '',
+                date_of_resolution: temp.date_of_resolution,
+                notes: temp.notes,
+                status: temp.status
+              });
+
+              // this.issue.priority = temp.priority;
+              // this.issue.repaired_by = temp.repaired_by;
+              // this.issue.repaired_on = temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '';
+              // this.issue.date_of_resolution = temp.date_of_resolution;
+              // this.issue.notes = temp.notes;
+              // this.issue.status = temp.status;
             }
 
             // display images
-            if (this.issue.image && this.issue.image.length) {
-              this.issue.image.split(',').forEach(item => {
+            if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length) {
+              this.issueForm.controls['image'].value.split(',').forEach(item => {
                 this.editImages.push(AppSettings.imageUrl + item);
               });
             }
@@ -108,47 +148,69 @@ export class NewIssuePage {
           } else {
             this._sharedService.presentToast('Error retrieving data to edit');
           }
+
+          // for admin, disable fields that are submitted by user
+          if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
+            this.issueForm.controls['domain'].disable();
+            this.issueForm.controls['issue_desc'].disable();
+            this.issueForm.controls['problem'].disable();
+            this.issueForm.controls['location'].disable();
+          }
         });
       }
     }
   }
 
   public save() {
-    // Spiner Lodder
+    console.log("in save");
+    this.submitAttempt = true;
 
+    if (this.issueForm.valid) {
 
-    // remove deleted images from issue.image
-    if (this.issue.deletedImages && this.issue.deletedImages.length > 0 && this.issue.did > 0) {
-      this.issue.deletedImages.split(',').forEach(item => {
-        this.issue.image = this.issue.image.replace(item, '');
-      });
-    }
-
-    // remove extra commas
-    if (this.issue.image && this.issue.image.length > 0) {
-      this.issue.image = this.issue.image.replace(/[, ]+/g, ',').trim();
-
-      if (this.issue.image.substr(0, 1) == ',') {
-        this.issue.image = this.issue.image.substr(1);
+      // if admin, enable user fields for form submission
+      if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
+        this.issueForm.controls['domain'].enable();
+        this.issueForm.controls['issue_desc'].enable();
+        this.issueForm.controls['problem'].enable();
+        this.issueForm.controls['location'].enable();
       }
 
-      if (this.issue.image.substr(this.issue.image.length - 1, 1) == ',') {
-        this.issue.image = this.issue.image.substr(0, this.issue.image.length - 1);
+      // remove deleted images from issue.image
+      if (this.issueForm.controls['deletedImages'].value && this.issueForm.controls['deletedImages'].value.length > 0 && this.issueForm.controls['did'].value > 0) {
+        this.issueForm.controls['deletedImages'].value.split(',').forEach(item => {
+          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(item, '');
+          this.issueForm.patchValue({
+            'image': this.issueForm.controls['image'].value.replace(item, '')
+          });
+        });
       }
+
+      // remove extra commas
+      if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length > 0) {
+        // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim();
+        this.issueForm.patchValue({
+          'image': this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim()
+        });
+
+        if (this.issueForm.controls['image'].value.substr(0, 1) == ',') {
+          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(1);
+          this.issueForm.patchValue({
+            'image': this.issueForm.controls['image'].value.substr(1)
+          });
+        }
+
+        if (this.issueForm.controls['image'].value.substr(this.issueForm.controls['image'].value.length - 1, 1) == ',') {
+          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1);
+          this.issueForm.patchValue({
+            'image': this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1)
+          });
+        }
+      }
+
+
+      this.uploadImage();
     }
 
-
-    this.uploadImage();
-     this.issue.domain = '';
-    this.issue.issue_desc = '';
-   this.issue.location=  '';
-    this.issue.problem = '';
-    // raised_by: this._sharedService.name,
-    // mobile: this._sharedService.mobile,
-    // role: 'role',
-    this.issue.image= '';
-    this.issue.deletedImages= '';
-    
   }
 
   insertData(body) {
@@ -204,14 +266,26 @@ export class NewIssuePage {
     let i = temp.indexOf(image);
     if (i != -1) {
 
-      if (this.issue.did > 0) {
-        if (this.issue.deletedImages.length == 0) {
-          this.issue.deletedImages = temp.splice(i, 1).toString();
+      if (this.issueForm.controls['did'].value > 0) {
+        if (this.issueForm.controls['deletedImages'].value.length == 0) {
+          // this.issueForm.controls['deletedImages'].value = temp.splice(i, 1).toString();
+
+          this.issueForm.patchValue({
+            'deletedImages': temp.splice(i, 1).toString()
+          });
+
         } else {
-          this.issue.deletedImages = this.issue.deletedImages + ',' + temp.splice(i, 1).toString();
+          // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages + ',' + temp.splice(i, 1).toString();
+
+          this.issueForm.patchValue({
+            'deletedImages': this.issueForm.controls['deletedImages'].value + ',' + temp.splice(i, 1).toString()
+          });
         }
 
-        this.issue.deletedImages = this.issue.deletedImages.replace(AppSettings.imageUrl, '');
+        // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages.replace(AppSettings.imageUrl, '');
+        this.issueForm.patchValue({
+          'deletedImages': this.issueForm.controls['deletedImages'].value.replace(AppSettings.imageUrl, '')
+        });
 
       } else {
         temp.splice(i, 1);
@@ -221,7 +295,11 @@ export class NewIssuePage {
     }
 
     if (type === 'new') {
-      this.issue.image = this.issue.image.replace(image, '');
+      // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(image, '');
+
+      this.issueForm.patchValue({
+        'image': this.issueForm.controls['image'].value.replace(image, '')
+      });
     }
 
   }
@@ -308,10 +386,17 @@ export class NewIssuePage {
       n = d.getTime(),
       newFileName = n + ".jpg";
 
-    if (!this.issue.image) {
-      this.issue.image = newFileName;
+    if (!this.issueForm.controls['image'].value) {
+      // this.issueForm.controls['image'].value= newFileName;
+      this.issueForm.patchValue({
+        image: newFileName
+      });
+
     } else {
-      this.issue.image = this.issue.image + ',' + newFileName;
+      // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value+ ',' + newFileName;
+      this.issueForm.patchValue({
+        image: this.issueForm.controls['image'].value + ',' + newFileName
+      });
     }
 
 
@@ -381,7 +466,9 @@ export class NewIssuePage {
         this.presentToast('Error while uploading file.');
       });
     });
-    const body = { issue: this.issue };
+
+    let p = Object.assign({}, this.issue, this.issueForm.value);
+    const body = { issue: p };
     this.insertData(body);
   }
 
