@@ -15,6 +15,7 @@ export class IssuesListPage {
   categories = [];
   issuesList = [];
   display = false;
+  collapse: string;
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
@@ -39,9 +40,14 @@ export class IssuesListPage {
 
           data.data.forEach(item => {
             if (item['domain'] != category) {
-
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
+
+              if (!this.collapse) {
+                console.log("here" + categoryTitle);
+                
+                this.collapse = categoryTitle;
+              }                          
 
               // category = item['domain'];
               this.categories.push(categoryTitle);

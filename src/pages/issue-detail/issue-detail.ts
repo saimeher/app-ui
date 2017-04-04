@@ -89,13 +89,13 @@ export class IssueDetailPage {
       title: 'Delete Issue',
       buttons: [
         {
-          text: 'Is your issue resolved ?',
+          text: 'Issue got resolved?',
           role: 'destructive',
           handler: () => {
             this.delete('user_resolved');
           }
         }, {
-          text: 'Is your issue not needed anymore?',
+          text: 'No more an issue?',
           role: 'destructive',          
           handler: () => {
             this.delete('user_deleted');

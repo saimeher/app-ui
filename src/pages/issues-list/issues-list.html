@@ -10,15 +10,16 @@
     </ion-buttons>-->
   </ion-navbar>
   <ion-toolbar color="secondary">
+      <ion-fab color="primary" middle right>
+    <button  (click)="showNewIssue()" ion-fab mini color="purple"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
     <ion-title>Pending Issues</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content #content>
-  <ion-fab top right edge>
-    <button (click)="showNewIssue()" ion-fab><ion-icon name="add"></ion-icon></button>
-  </ion-fab>
   
   
   <!--<ion-list *ngIf="issuesList.length > 0">
@@ -27,9 +28,12 @@
     </button>
   </ion-list>-->
 
-  <ion-item-group *ngFor="let category of categories" >
-    <ion-item-divider color="light">{{category | uppercase}}</ion-item-divider>
-    <button ion-item *ngFor="let issue of issuesList[category]"  (click)="issueSelected(issue)">{{issue.issue_desc}}</button>
+  <ion-item-group *ngFor="let category of categories; let i=index" >
+
+    <ion-item-divider (click)="collapse = category" color="light"> {{category | uppercase}}  <ion-badge item-right >{{issuesList[category].length}}</ion-badge> </ion-item-divider>
+    <ion-item *ngIf="collapse == category">
+        <button ion-item *ngFor="let issue of issuesList[category];let i=index" (click)="issueSelected(issue)"> {{i+1}}. {{issue.issue_desc}}</button>
+        </ion-item>
   </ion-item-group>
 
 

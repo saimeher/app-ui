@@ -151,10 +151,10 @@ export class NewIssuePage {
 
           // for admin, disable fields that are submitted by user
           if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-            this.issueForm.controls['domain'].disable();
-            this.issueForm.controls['issue_desc'].disable();
-            this.issueForm.controls['problem'].disable();
-            this.issueForm.controls['location'].disable();
+            // this.issueForm.controls['domain'].disable();
+            // this.issueForm.controls['issue_desc'].disable();
+            // this.issueForm.controls['problem'].disable();
+            // this.issueForm.controls['location'].disable();
           }
         });
       }
@@ -169,10 +169,10 @@ export class NewIssuePage {
 
       // if admin, enable user fields for form submission
       if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-        this.issueForm.controls['domain'].enable();
-        this.issueForm.controls['issue_desc'].enable();
-        this.issueForm.controls['problem'].enable();
-        this.issueForm.controls['location'].enable();
+        // this.issueForm.controls['domain'].enable();
+        // this.issueForm.controls['issue_desc'].enable();
+        // this.issueForm.controls['problem'].enable();
+        // this.issueForm.controls['location'].enable();
       }
 
       // remove deleted images from issue.image

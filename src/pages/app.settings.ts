@@ -1,17 +1,28 @@
 export class AppSettings {
 
 
-  public static uploadUrl = 'http://raghuenggcollege.com/issues/server/upload/upload';
-  public static imageUrl = 'http://raghuenggcollege.com/issues/server/uploads/';
+  // public static uploadUrl = 'http://raghuenggcollege.com/issues/server/upload/upload';
+  // public static imageUrl = 'http://raghuenggcollege.com/issues/server/uploads/';
 
-  public static newIssueApi = 'http://raghuenggcollege.com/issues/server/api/insert_data';
-  public static issuesListApi = 'http://raghuenggcollege.com/issues/server/api/issues_list';
-  public static getIssueApi = 'http://raghuenggcollege.com/issues/server/api/get_issue';
+  // public static newIssueApi = 'http://raghuenggcollege.com/issues/server/api/insert_data';
+  // public static issuesListApi = 'http://raghuenggcollege.com/issues/server/api/issues_list';
+  // public static getIssueApi = 'http://raghuenggcollege.com/issues/server/api/get_issue';
 
-  public static registerApi = 'http://raghuenggcollege.com/issues/server/api/register';
-  public static loginApi = 'http://raghuenggcollege.com/issues/server/api/login';
-  public static deleteApi = 'http://raghuenggcollege.com/issues/server/api/delete_issue';
-  public static forgetPasswordApi = 'http://raghuenggcollege.com/issues/server/api/forget_password';
+  // public static registerApi = 'http://raghuenggcollege.com/issues/server/api/register';
+  // public static loginApi = 'http://raghuenggcollege.com/issues/server/api/login';
+  // public static deleteApi = 'http://raghuenggcollege.com/issues/server/api/delete_issue';
+  // public static forgetPasswordApi = 'http://raghuenggcollege.com/issues/server/api/forget_password';
+    public static uploadUrl = 'http://192.168.0.118/issue_register/upload/upload';
+  public static imageUrl = 'http://192.168.0.118/issue_register/uploads/';
+
+  public static newIssueApi = 'http://192.168.0.118/issue_register/api/insert_data';
+  public static issuesListApi = 'http://192.168.0.118/issue_register/api/issues_list';
+  public static getIssueApi = 'http://192.168.0.118/issue_register/api/get_issue';
+
+  public static registerApi = 'http://192.168.0.118/issue_register/api/register';
+  public static loginApi = 'http://192.168.0.118/issue_register/api/login';
+  public static deleteApi = 'http://192.168.0.118/issue_register/api/delete_issue';
+  public static forgetPasswordApi = 'http://192.168.0.118/issue_register/api/forget_password';
   // public static forgetPasswordApi = 'http://localhost:81/api/forget_password';
 
   public static domains = [

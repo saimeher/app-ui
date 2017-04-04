@@ -6,7 +6,7 @@ import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
 import { IssueDetailPage, NewIssuePage } from '../pages';
-import { LoadingController }  from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'issues-list-closed',
@@ -16,8 +16,9 @@ export class IssuesListClosedPage {
   categories = [];
   issuesList = [];
   display = false;
+  collapse: string;
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, private loadingCtrl:LoadingController) {
+  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
@@ -26,7 +27,7 @@ export class IssuesListClosedPage {
 
   // get issues list to display as a list
   getIssuesList() {
-     let load = this.loadingCtrl.create({
+    let load = this.loadingCtrl.create({
       spinner: 'hide',
       content: 'Loading Please Wait...',
       // dismissOnPageChange: true
@@ -46,7 +47,11 @@ export class IssuesListClosedPage {
             if (item['domain'] != category) {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
-
+                 if (!this.collapse) {
+                console.log("here" + categoryTitle);
+                
+                this.collapse = categoryTitle;
+              }  
               // category = item['domain'];
               this.categories.push(category);
               this.issuesList[category] = [];
@@ -68,7 +73,7 @@ export class IssuesListClosedPage {
   }
 
   showNewIssue() {
-    
+
 
     this.navCtrl.push(NewIssuePage);
   }
