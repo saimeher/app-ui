@@ -100,9 +100,20 @@ export class NewIssuePage {
     if (this.navParams.data > 0) {
       this.did = this.navParams.data;
       if (this.did) {
+
+        let load = this.loadingCtrl.create({
+          spinner: 'circles',
+          content: 'Loading Please Wait...',
+          // dismissOnPageChange: true
+        });
+        load.present();
+
         this._apiService.callApi(AppSettings.getIssueApi, "post", { did: this.did }).subscribe(data => {
+          load.dismiss();
           if (data.success) {
             let temp = data.data[0];
+            console.log('data is' + temp);
+
             this.issueForm.patchValue({
               did: this.did,
               domain: temp.domain,
@@ -129,7 +140,7 @@ export class NewIssuePage {
               // this.issue.priority = temp.priority;
               // this.issue.repaired_by = temp.repaired_by;
               // this.issue.repaired_on = temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '';
-              // this.issue.date_of_resolution = temp.date_of_resolution;
+              // this.issue.date_of_resolution = temp.date_of_resolution;subscribe
               // this.issue.notes = temp.notes;
               // this.issue.status = temp.status;
             }
@@ -156,6 +167,11 @@ export class NewIssuePage {
             // this.issueForm.controls['problem'].disable();
             // this.issueForm.controls['location'].disable();
           }
+
+
+        }, error => {
+          load.dismiss();
+          this._sharedService.presentToast('Server error: ' + error);
         });
       }
     }
@@ -248,6 +264,9 @@ export class NewIssuePage {
 
 
         }
+      }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
       });
 
 

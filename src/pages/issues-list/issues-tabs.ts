@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IssuesListClosedPage, IssuesListPage } from '../pages';
+import { IssuesListClosedPage, IssuesListPage, IssuesListInProgressPage } from '../pages';
 
 @Component({
     selector: 'issues',
@@ -8,6 +8,7 @@ import { IssuesListClosedPage, IssuesListPage } from '../pages';
 export class IssuesTabsPage {
     tabPending = IssuesListPage;
     tabClosed = IssuesListClosedPage;
+    tabInProgress = IssuesListInProgressPage;
 
     constructor() {
     }

@@ -5,7 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
-import { WelcomePage, RegisterPage, NewIssuePage, IssuesListPage, IssueDetailPage, IssuesTabsPage, IssuesListClosedPage } from '../pages/pages';
+import { WelcomePage, RegisterPage, NewIssuePage, IssuesListPage, IssueDetailPage, IssuesTabsPage, IssuesListClosedPage, IssuesListInProgressPage } from '../pages/pages';
 import { ApiService, DeviceService, SharedService, DateToIso } from '../common/common';
 
 @NgModule({
@@ -18,6 +18,7 @@ import { ApiService, DeviceService, SharedService, DateToIso } from '../common/c
     IssueDetailPage,
     IssuesTabsPage,
     IssuesListClosedPage,
+    IssuesListInProgressPage,
     DateToIso
   ],
   imports: [
@@ -37,6 +38,7 @@ import { ApiService, DeviceService, SharedService, DateToIso } from '../common/c
     IssueDetailPage,
     IssuesTabsPage,
     IssuesListClosedPage,
+    IssuesListInProgressPage,
   ],
   providers: [
     StatusBar,

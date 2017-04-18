@@ -2,22 +2,23 @@ import { Component } from '@angular/core';
 // import { Sim } from 'ionic-native';
 import { NavController } from 'ionic-angular';
 
+
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
 import { IssueDetailPage, NewIssuePage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
-  selector: 'issues-list',
-  templateUrl: 'issues-list.html',
+  selector: 'issues-list-inprogress',
+  templateUrl: 'issues-list-inprogress.html',
 })
-export class IssuesListPage {
+export class IssuesListInProgressPage {
   categories = [];
   issuesList = [];
   display = false;
   collapse: string;
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
+  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
@@ -26,17 +27,14 @@ export class IssuesListPage {
 
   // get issues list to display as a list
   getIssuesList() {
-    console.log('mobile is', this._sharedService.mobile);
     let load = this.loadingCtrl.create({
       spinner: 'hide',
       content: 'Loading Please Wait...',
       // dismissOnPageChange: true
     })
     load.present();
-    this._apiService.callApi(AppSettings.issuesListApi, 'post', { mobile: this._sharedService.mobile, role: this._sharedService.role, type: 'pending' })
+    this._apiService.callApi(AppSettings.issuesListApi, 'post', { mobile: this._sharedService.mobile, role: this._sharedService.role, type: 'in_progress' })
       .subscribe(data => {
-        load.dismiss();
-
         if (data.success) {
           console.log(JSON.stringify(data.data));
           this.categories = [];
@@ -49,13 +47,11 @@ export class IssuesListPage {
             if (item['domain'] != category) {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
-
-              if (!this.collapse) {
+                 if (!this.collapse) {
                 console.log("here" + categoryTitle);
-
+                
                 this.collapse = categoryTitle;
-              }
-
+              }  
               // category = item['domain'];
               this.categories.push(categoryTitle);
               this.issuesList[categoryTitle] = [];
@@ -63,12 +59,9 @@ export class IssuesListPage {
             } else {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             }
-
           });
-
-          console.log(this.issuesList);
-
         }
+        load.dismiss();
       }, error => {
         load.dismiss();
         this._sharedService.presentToast('Server error: ' + error);
@@ -76,21 +69,15 @@ export class IssuesListPage {
   }
 
   issueSelected(issue) {
-
     this.display = !this.display;
-    // Spiner Loader
-    // let loading = this.loadingCtrl.create({
-    //   spinner: 'hide',
-    //   content: 'Loading Please Wait...',
-    //   dismissOnPageChange: true
-    // }).present();
-
     this.navCtrl.push(IssueDetailPage, {
       did: issue.did
     });
   }
 
   showNewIssue() {
+
+
     this.navCtrl.push(NewIssuePage);
   }
 

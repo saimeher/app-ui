@@ -1,6 +1,5 @@
 export class AppSettings {
 
-
   public static uploadUrl = 'http://raghuenggcollege.com/issues/server/upload/upload';
   public static imageUrl = 'http://raghuenggcollege.com/issues/server/uploads/';
 
@@ -12,7 +11,6 @@ export class AppSettings {
   public static loginApi = 'http://raghuenggcollege.com/issues/server/api/login';
   public static deleteApi = 'http://raghuenggcollege.com/issues/server/api/delete_issue';
   public static forgetPasswordApi = 'http://raghuenggcollege.com/issues/server/api/forget_password';
-
 
 
   public static domains = [

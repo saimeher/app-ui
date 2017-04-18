@@ -36,9 +36,13 @@ export class WelcomePage {
     // if (this._sharedService.getStorage('loggedIn')) {
     //   this.navCtrl.setRoot(IssuesTabsPage);
     // }
-
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'circles',
+    //   content: 'Loading Please Wait...',
+    // });
+    // load.present();
     this._sharedService.getStorage('loggedIn').subscribe(data => {
-
+      // load.dismiss();
       if (data == true) {
         Observable.forkJoin([
           this._sharedService.getStorage('name'),
@@ -52,6 +56,10 @@ export class WelcomePage {
           this.navCtrl.setRoot(IssuesTabsPage);
         })
       }
+
+    }, error => {
+      // load.dismiss();
+      this._sharedService.presentToast('Server error: ' + error);
     })
   }
 
@@ -64,15 +72,17 @@ export class WelcomePage {
 
     if (this.loginForm.valid) {
       let body = { mobile: this.loginForm.controls['mobile'].value, password: this.loginForm.controls['password'].value };
-      // spiner code
+
       let load = this.loadingCtrl.create({
         spinner: 'circles',
         content: 'Loading Please Wait...',
-        dismissOnPageChange: true
+        // dismissOnPageChange: true
       });
       load.present();
 
       this._apiService.callApi(AppSettings.loginApi, 'post', body).subscribe(data => {
+        load.dismiss();
+
         if (data.success) {
           this._sharedService.setStorage('loggedIn', true);
           this._sharedService.setStorage('mobile', this.loginForm.controls['mobile'].value);
@@ -90,15 +100,17 @@ export class WelcomePage {
             mobile: '',
             password: ''
           })
-          load.dismiss();
         }
+      }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
       });
     }
   }
 
   showLogin() {
-    this.forgotPassword=false;
-    this.submitAttempt=false;    
+    this.forgotPassword = false;
+    this.submitAttempt = false;
     this.loginForm.controls['password'].setValidators([Validators.required]);
     this.loginForm.controls['password'].updateValueAndValidity();
   }
@@ -129,6 +141,9 @@ export class WelcomePage {
         this.navCtrl.setRoot(WelcomePage);
         this.submitAttempt = false;
         this.forgotPassword = false;
+      }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
       });
     }
   }

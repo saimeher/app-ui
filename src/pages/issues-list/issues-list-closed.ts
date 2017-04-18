@@ -47,21 +47,24 @@ export class IssuesListClosedPage {
             if (item['domain'] != category) {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
-                 if (!this.collapse) {
+              if (!this.collapse) {
                 console.log("here" + categoryTitle);
-                
+
                 this.collapse = categoryTitle;
-              }  
+              }
               // category = item['domain'];
-              this.categories.push(category);
-              this.issuesList[category] = [];
-              this.issuesList[category].push({ did: item.did, issue_desc: item.issue_desc });
+              this.categories.push(categoryTitle);
+              this.issuesList[categoryTitle] = [];
+              this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
-              this.issuesList[category].push({ did: item.did, issue_desc: item.issue_desc });
+              this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             }
           });
         }
         load.dismiss();
+      }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
       });
   }
 

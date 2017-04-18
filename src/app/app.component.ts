@@ -4,8 +4,8 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { WelcomePage, NewIssuePage, IssuesListPage } from '../pages/pages';
-import { DeviceService, SharedService } from '../common/common';
+import { WelcomePage } from '../pages/pages';
+import { SharedService } from '../common/common';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,13 +21,10 @@ export class MyApp {
     public menu: MenuController,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private _deviceService: DeviceService,
     private _sharedService: SharedService
   ) {
     this.initializeApp();
   }
-
-
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -41,7 +38,7 @@ export class MyApp {
 
   openPage(page) {
     // close the menu when clicking a link from the menu
-    this.menu.close();
+    // this.menu.close();
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }

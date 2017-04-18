@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
@@ -19,7 +19,7 @@ export class RegisterPage {
     registerForm: FormGroup;
     submitAttempt = false;
 
-    constructor(private navCtrl: NavController, private _apiService: ApiService, private _sharedService: SharedService, private formBuilder: FormBuilder) {
+    constructor(private navCtrl: NavController, private loadingCtrl: LoadingController, private _apiService: ApiService, private _sharedService: SharedService, private formBuilder: FormBuilder) {
         this.registerForm = this.formBuilder.group({
             mobile: ['', Validators.required],
             password: ['', Validators.required],
@@ -33,7 +33,15 @@ export class RegisterPage {
         if (this.registerForm.valid) {
             let body = Object.assign({}, this.registerForm.value);
 
+                  let load = this.loadingCtrl.create({
+        spinner: 'circles',
+        content: 'Loading Please Wait...',
+        dismissOnPageChange: true
+      });
+      load.present();
+
             this._apiService.callApi(AppSettings.registerApi, 'post', body).subscribe(data => {
+                load.dismiss();
                 if (data.success) {
                     this._sharedService.presentToast('User registered successfully');
                     this._sharedService.setStorage('mobile', this.registerForm.controls['mobile'].value);
@@ -45,7 +53,10 @@ export class RegisterPage {
                 } else {
                     this._sharedService.presentToast('Error: ' + data.error);
                 }
-            });
+            }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
+      });
         }
     }
 }

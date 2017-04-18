@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle><ion-icon name="md-menu"></ion-icon></button>
+    <ion-title>Issues List</ion-title>
+    <!--<ion-buttons end>
+      <button (click)="showNewIssue()" ion-button icon-only color="royal">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>-->
+  </ion-navbar>
+  <ion-toolbar color="secondary">
+    <ion-title>In Progress</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+  <!--<ion-list *ngIf="issuesList.length > 0">
+    <button ion-item *ngFor="let issue of issuesList" (click)="issueSelected(issue)">
+      {{ issue.issue_desc }}
+    </button>
+  </ion-list>-->
+
+  <ion-item-group *ngFor="let category of categories" >
+    <ion-item-divider (click)="collapse = category" color="light">{{category | uppercase}}  <ion-badge item-right >{{issuesList[category].length}}</ion-badge> </ion-item-divider>
+     <ion-item *ngIf="collapse == category">
+    <button ion-item *ngFor="let issue of issuesList[category]; let i =index"  (click)="issueSelected(issue)">{{i+1}}. {{issue.issue_desc}}</button>
+     </ion-item>
+  </ion-item-group>
+</ion-content>

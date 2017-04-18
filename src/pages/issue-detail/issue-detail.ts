@@ -56,6 +56,9 @@ export class IssueDetailPage {
         }
               load.dismiss();
 
+      }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
       });
   }
 
@@ -72,15 +75,18 @@ export class IssueDetailPage {
     load.present();
 
     this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile, status: status }).subscribe(data => {
+      load.dismiss();
       if (data.success) {
         this._sharedService.presentToast('Issue deleted successfully');
         this.navCtrl.pop();
       } else {
         this._sharedService.presentToast('Error: ' + data.error);
       }
-          load.dismiss();
 
-    });
+    }, error => {
+        load.dismiss();
+        this._sharedService.presentToast('Server error: ' + error);
+      });
 
   }
 
