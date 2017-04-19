@@ -16,11 +16,14 @@ export class IssuesListPage {
   issuesList = [];
   display = false;
   collapse: string;
+  issueCount: number;
+  refresher;
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
+    this.collapse = '';
     this.getIssuesList();
   }
 
@@ -35,8 +38,6 @@ export class IssuesListPage {
     load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { mobile: this._sharedService.mobile, role: this._sharedService.role, type: 'pending' })
       .subscribe(data => {
-        load.dismiss();
-
         if (data.success) {
           console.log(JSON.stringify(data.data));
           this.categories = [];
@@ -45,16 +46,21 @@ export class IssuesListPage {
           let category;
           let categoryTitle;
 
+          this.issueCount = data.data.length;
+          this._sharedService.presentToast(this.issueCount + ' Issues pending', 'bottom', 1000);
+
           data.data.forEach(item => {
             if (item['domain'] != category) {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
 
+              /*
               if (!this.collapse) {
                 console.log("here" + categoryTitle);
 
                 this.collapse = categoryTitle;
               }
+              */
 
               // category = item['domain'];
               this.categories.push(categoryTitle);
@@ -69,8 +75,16 @@ export class IssuesListPage {
           console.log(this.issuesList);
 
         }
+        load.dismiss();
+
+        if (this.refresher) {
+          this.refresher.complete();
+        }
       }, error => {
         load.dismiss();
+        if (this.refresher) {
+          this.refresher.complete();
+        }
         this._sharedService.presentToast('Server error: ' + error);
       });
   }
@@ -92,6 +106,19 @@ export class IssuesListPage {
 
   showNewIssue() {
     this.navCtrl.push(NewIssuePage);
+  }
+
+  collapseCategory(category) {
+    if (this.collapse == category) {
+      this.collapse = '';
+    } else {
+      this.collapse = category;
+    }
+  }
+
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    this.getIssuesList();
   }
 
 

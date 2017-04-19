@@ -17,11 +17,14 @@ export class IssuesListInProgressPage {
   issuesList = [];
   display = false;
   collapse: string;
+  issueCount: number;
+  refresher;
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
+    this.collapse = '';
     this.getIssuesList();
   }
 
@@ -43,15 +46,19 @@ export class IssuesListInProgressPage {
           let category;
           let categoryTitle;
 
+          this.issueCount = data.data.length;
+          this._sharedService.presentToast(this.issueCount + ' Issues in progress', 'bottom', 1000);
+
+
           data.data.forEach(item => {
             if (item['domain'] != category) {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
-                 if (!this.collapse) {
-                console.log("here" + categoryTitle);
-                
-                this.collapse = categoryTitle;
-              }  
+              // if (!this.collapse) {
+              //   console.log("here" + categoryTitle);
+
+              //   this.collapse = categoryTitle;
+              // }
               // category = item['domain'];
               this.categories.push(categoryTitle);
               this.issuesList[categoryTitle] = [];
@@ -61,8 +68,14 @@ export class IssuesListInProgressPage {
             }
           });
         }
+        if (this.refresher) {
+          this.refresher.complete();
+        }
         load.dismiss();
       }, error => {
+        if (this.refresher) {
+          this.refresher.complete();
+        }
         load.dismiss();
         this._sharedService.presentToast('Server error: ' + error);
       });
@@ -76,10 +89,20 @@ export class IssuesListInProgressPage {
   }
 
   showNewIssue() {
-
-
     this.navCtrl.push(NewIssuePage);
   }
 
+  collapseCategory(category) {
+    if (this.collapse == category) {
+      this.collapse = '';
+    } else {
+      this.collapse = category;
+    }
+  }
+
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    this.getIssuesList();
+  }
 
 }

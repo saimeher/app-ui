@@ -36,6 +36,7 @@ export class NewIssuePage {
   reset;
 
   submitAttempt: boolean = false;
+  tempPatch;      // if user is not admin, but tries to update status in another category (fixx)
 
   issue: Issue = {
     domain: '',
@@ -84,8 +85,12 @@ export class NewIssuePage {
       image: [''],
       deletedImages: [''],
     })
+  }
 
+  domainSelected(domain) {
+    let info = '';
 
+    this._sharedService.presentToast(domain.info, 'bottom');
   }
 
   ionViewDidEnter() {
@@ -127,15 +132,22 @@ export class NewIssuePage {
               deletedImages: '',
             });
 
-            if (this._sharedService.role === 'admin') {
-              this.issueForm.patchValue({
-                priority: temp.priority,
-                repaired_by: temp.repaired_by,
-                repaired_on: temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '',
-                date_of_resolution: temp.date_of_resolution,
-                notes: temp.notes,
-                status: temp.status
-              });
+            this.tempPatch = {
+              priority: temp.priority,
+              repaired_by: temp.repaired_by,
+              repaired_on: temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '',
+              date_of_resolution: temp.date_of_resolution,
+              notes: temp.notes,
+              status: temp.status
+            };
+
+
+            console.log("temp domain", temp.domain, this._sharedService.domain_admin, (this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1));
+
+
+            if (this._sharedService.role === 'admin' && (this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
+
+              this.issueForm.patchValue(this.tempPatch);
 
               // this.issue.priority = temp.priority;
               // this.issue.repaired_by = temp.repaired_by;
@@ -162,10 +174,10 @@ export class NewIssuePage {
 
           // for admin, disable fields that are submitted by user
           if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-            // this.issueForm.controls['domain'].disable();
-            // this.issueForm.controls['issue_desc'].disable();
-            // this.issueForm.controls['problem'].disable();
-            // this.issueForm.controls['location'].disable();
+            this.issueForm.controls['domain'].disable();
+            this.issueForm.controls['issue_desc'].disable();
+            this.issueForm.controls['problem'].disable();
+            this.issueForm.controls['location'].disable();
           }
 
 
@@ -181,14 +193,19 @@ export class NewIssuePage {
     console.log("in save");
     this.submitAttempt = true;
 
+    // if admin, enable user fields for form submission
+    if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
+      this.issueForm.controls['domain'].enable();
+      this.issueForm.controls['issue_desc'].enable();
+      this.issueForm.controls['problem'].enable();
+      this.issueForm.controls['location'].enable();
+    }
+
     if (this.issueForm.valid) {
 
-      // if admin, enable user fields for form submission
-      if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-        // this.issueForm.controls['domain'].enable();
-        // this.issueForm.controls['issue_desc'].enable();
-        // this.issueForm.controls['problem'].enable();
-        // this.issueForm.controls['location'].enable();
+      if (this.issueForm.controls['did'].value > 0 && this._sharedService.role === 'admin' && (this._sharedService.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
+        console.log("temp patch is", this.tempPatch)
+        this.issueForm.patchValue(this.tempPatch);
       }
 
       // remove deleted images from issue.image
@@ -264,9 +281,24 @@ export class NewIssuePage {
 
 
         }
+
+        // if admin, enable user fields for form submission
+        if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
+          this.issueForm.controls['domain'].disable();
+          this.issueForm.controls['issue_desc'].disable();
+          this.issueForm.controls['problem'].disable();
+          this.issueForm.controls['location'].disable();
+        }
       }, error => {
         load.dismiss();
         this._sharedService.presentToast('Server error: ' + error);
+
+        // if admin, enable user fields for form submission
+        if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
+          this.issueForm.controls['domain'].disable();
+          this.issueForm.controls['issue_desc'].disable();
+          this.issueForm.controls['problem'].disable();
+        }
       });
 
 

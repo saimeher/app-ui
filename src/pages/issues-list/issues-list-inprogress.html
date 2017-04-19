@@ -15,17 +15,20 @@
 
 
 <ion-content>
-
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
   <!--<ion-list *ngIf="issuesList.length > 0">
     <button ion-item *ngFor="let issue of issuesList" (click)="issueSelected(issue)">
       {{ issue.issue_desc }}
     </button>
   </ion-list>-->
-
-  <ion-item-group *ngFor="let category of categories" >
-    <ion-item-divider (click)="collapse = category" color="light">{{category | uppercase}}  <ion-badge item-right >{{issuesList[category].length}}</ion-badge> </ion-item-divider>
-     <ion-item *ngIf="collapse == category">
-    <button ion-item *ngFor="let issue of issuesList[category]; let i =index"  (click)="issueSelected(issue)">{{i+1}}. {{issue.issue_desc}}</button>
-     </ion-item>
+  <ion-item-group *ngFor="let category of categories">
+    <ion-item-divider (click)="collapseCategory(category)" color="light">{{category | uppercase}}
+      <ion-badge item-right>{{issuesList[category].length}}</ion-badge>
+    </ion-item-divider>
+    <ion-item *ngIf="collapse == category">
+      <button ion-item *ngFor="let issue of issuesList[category]; let i =index" (click)="issueSelected(issue)">{{i+1}}. {{issue.issue_desc}}</button>
+    </ion-item>
   </ion-item-group>
 </ion-content>

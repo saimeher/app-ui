@@ -47,12 +47,14 @@ export class WelcomePage {
         Observable.forkJoin([
           this._sharedService.getStorage('name'),
           this._sharedService.getStorage('mobile'),
-          this._sharedService.getStorage('role')
+          this._sharedService.getStorage('role'),
+          this._sharedService.getStorage('domain_admin'),
         ]
         ).subscribe(dataArray => {
           this._sharedService.name = dataArray[0].toString();
           this._sharedService.mobile = dataArray[1].toString();
           this._sharedService.role = dataArray[2].toString();
+          this._sharedService.domain_admin = dataArray[3].toString();
           this.navCtrl.setRoot(IssuesTabsPage);
         })
       }
@@ -88,10 +90,13 @@ export class WelcomePage {
           this._sharedService.setStorage('mobile', this.loginForm.controls['mobile'].value);
           this._sharedService.setStorage('name', data.data[0].name);
           this._sharedService.setStorage('role', data.data[0].role);
+          this._sharedService.setStorage('domain_admin', data.data[0].domain_admin);
 
           this._sharedService.name = data.data[0].name;
           this._sharedService.mobile = this.loginForm.controls['mobile'].value;
           this._sharedService.role = data.data[0].role;
+          this._sharedService.domain_admin = data.data[0].domain_admin;
+
           this.navCtrl.setRoot(IssuesTabsPage);
         } else {
           this.submitAttempt = false;

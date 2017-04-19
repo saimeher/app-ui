@@ -8,17 +8,18 @@ export class SharedService {
     public mobile: string;
     public name: string;
     public role: string;
+    public domain_admin: string;
 
     constructor(private toastCtrl: ToastController, private storage: Storage) {
 
 
     }
 
-    presentToast(message) {
+    presentToast(message, position='top', duration=3000) {
         let toast = this.toastCtrl.create({
             message: message,
-            position: 'top',
-            duration: 3000
+            position: position,
+            duration: duration
         });
         toast.present();
     }
