@@ -51,10 +51,10 @@ export class WelcomePage {
           this._sharedService.getStorage('domain_admin'),
         ]
         ).subscribe(dataArray => {
-          this._sharedService.name = dataArray[0].toString();
-          this._sharedService.mobile = dataArray[1].toString();
-          this._sharedService.role = dataArray[2].toString();
-          this._sharedService.domain_admin = dataArray[3].toString();
+          if (dataArray[0]) this._sharedService.name = dataArray[0].toString();
+          if (dataArray[1]) this._sharedService.mobile = dataArray[1].toString();
+          if (dataArray[2]) this._sharedService.role = dataArray[2].toString();
+          if (dataArray[3]) this._sharedService.domain_admin = dataArray[3].toString();
           this.navCtrl.setRoot(IssuesTabsPage);
         })
       }

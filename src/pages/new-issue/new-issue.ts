@@ -142,10 +142,10 @@ export class NewIssuePage {
             };
 
 
-            console.log("temp domain", temp.domain, this._sharedService.domain_admin, (this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1));
+            console.log("temp domain", temp.domain, this._sharedService.domain_admin, (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1));
 
 
-            if (this._sharedService.role === 'admin' && (this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
+            if (this._sharedService.role === 'admin' && (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
 
               this.issueForm.patchValue(this.tempPatch);
 
@@ -174,7 +174,7 @@ export class NewIssuePage {
 
           // for admin, disable fields that are submitted by user
           if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-            this.issueForm.controls['domain'].disable();
+            // this.issueForm.controls['domain'].disable();
             this.issueForm.controls['issue_desc'].disable();
             this.issueForm.controls['problem'].disable();
             this.issueForm.controls['location'].disable();
@@ -195,7 +195,7 @@ export class NewIssuePage {
 
     // if admin, enable user fields for form submission
     if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-      this.issueForm.controls['domain'].enable();
+      // this.issueForm.controls['domain'].enable();
       this.issueForm.controls['issue_desc'].enable();
       this.issueForm.controls['problem'].enable();
       this.issueForm.controls['location'].enable();
@@ -203,7 +203,7 @@ export class NewIssuePage {
 
     if (this.issueForm.valid) {
 
-      if (this.issueForm.controls['did'].value > 0 && this._sharedService.role === 'admin' && (this._sharedService.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
+      if (this.issueForm.controls['did'].value > 0 && this._sharedService.role === 'admin' && (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
         console.log("temp patch is", this.tempPatch)
         this.issueForm.patchValue(this.tempPatch);
       }
@@ -284,7 +284,7 @@ export class NewIssuePage {
 
         // if admin, enable user fields for form submission
         if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-          this.issueForm.controls['domain'].disable();
+          // this.issueForm.controls['domain'].disable();
           this.issueForm.controls['issue_desc'].disable();
           this.issueForm.controls['problem'].disable();
           this.issueForm.controls['location'].disable();
@@ -295,9 +295,10 @@ export class NewIssuePage {
 
         // if admin, enable user fields for form submission
         if (this.issueForm.controls['mobile'].value != this._sharedService.mobile) {
-          this.issueForm.controls['domain'].disable();
+          // this.issueForm.controls['domain'].disable();
           this.issueForm.controls['issue_desc'].disable();
           this.issueForm.controls['problem'].disable();
+          this.issueForm.controls['location'].disable();
         }
       });
 

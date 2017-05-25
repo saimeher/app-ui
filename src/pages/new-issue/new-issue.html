@@ -42,7 +42,7 @@
       formControlName="problem" type="text"></ion-input>
     </ion-item>
 
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Priority</ion-label>
       <ion-select formControlName="priority">
         <ion-option value="high">High</ion-option>
@@ -50,23 +50,23 @@
         <ion-option value="low">Low</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Repaired On</ion-label>
       <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="MMMM DD, YYYY HH:mm" formControlName="repaired_on"></ion-datetime>
     </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Assigned to</ion-label>
       <ion-input formControlName="repaired_by" type="text"></ion-input>
     </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Date of Resolution</ion-label>
       <ion-datetime displayFormat="YYYY-MM-DD" pickerFormat="MMMM DD, YYYY" formControlName="date_of_resolution"></ion-datetime>
     </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Notes</ion-label>
       <ion-input formControlName="notes" type="text"></ion-input>
     </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
       <ion-label stacked>Status</ion-label>
       <ion-select formControlName="status">
         <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option>
