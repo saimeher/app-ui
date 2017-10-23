@@ -10,6 +10,10 @@ export class ApiService {
         console.log(`Http call to ${url} of method: ${method} with body ${JSON.stringify(body)} `);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
+
+        if (sessionStorage.getItem('token')) {
+            headers.append('token', sessionStorage.getItem('token'));
+          }
         
         switch(method) {
             case 'post': return this.http.post(url, body, options).map((response: Response) => response.json());

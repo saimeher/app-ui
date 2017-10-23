@@ -1,42 +1,66 @@
 <ion-header>
-  <ion-navbar color="primary">
-
-    <button ion-button menuToggle><ion-icon name="md-menu"></ion-icon></button>
-    <ion-title>Issues List</ion-title>
-    <!--<ion-buttons end>
-      <button ion-button icon-only color="royal">
-        <ion-icon name="add-circle"></ion-icon>
-      </button>
-    </ion-buttons>-->
-  </ion-navbar>
-  <ion-toolbar color="secondary">
-      <ion-fab color="primary" middle right>
-    <button  (click)="showNewIssue()" ion-fab mini color="purple"><ion-icon name="add"></ion-icon></button>
-  </ion-fab>
-
-    <ion-title>Pending Issues </ion-title>
-  </ion-toolbar>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle><ion-icon name="md-menu"></ion-icon></button>
+        <ion-title>Issues List</ion-title>
+    </ion-navbar>
+    <ion-toolbar color="secondary">
+        <ion-fab color="primary" middle right>
+            <button (click)="showNewIssue()" ion-fab mini color="purple"><ion-icon name="add"></ion-icon></button>
+        </ion-fab>
+        <ion-title>Pending Issues</ion-title>
+    </ion-toolbar>
 </ion-header>
-
-
 <ion-content #content>
-      <ion-refresher (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
+       
+        <ion-toolbar color="orange">
+
+                <ion-badge item-right >{{issueCount}}</ion-badge>
+                <ion-title>Issues raised by me </ion-title>
+            </ion-toolbar>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-  
-  <!--<ion-list *ngIf="issuesList.length > 0">
-    <button ion-item *ngFor="let issue of issuesList" (click)="issueSelected(issue)">
-      {{ issue.issue_desc }}
-    </button>
-  </ion-list>-->
 
-  <ion-item-group *ngFor="let category of categories; let i=index" >
 
-    <ion-item-divider (click)="collapseCategory(category)" color="light"> {{category | uppercase}}  <ion-badge item-right >{{issuesList[category].length}}</ion-badge> </ion-item-divider>
-    <ion-item *ngIf="collapse == category">
-        <button ion-item *ngFor="let issue of issuesList[category];let i=index" (click)="issueSelected(issue)"> {{i+1}}. {{issue.issue_desc}}</button>
+    <ion-list *ngIf= "issuesListlength  == 0 ">
+    <p style="font-size:18px">no data</p>
+    </ion-list>
+    
+    <ion-item-group *ngFor="let category of categories; let i=index">
+        <ion-item-divider (click)="collapseCategory(category)" color="light"> {{category | uppercase}}
+            <ion-badge item-right>{{issuesList[category].length}}</ion-badge>
+        </ion-item-divider>
+        <ion-item *ngIf="collapse == category">
+            <button ion-item *ngFor="let issue of issuesList[category];let i=index" (click)="issueSelected(issue)"> {{i+1}}. {{issue.issue_desc}}</button>
         </ion-item>
-  </ion-item-group>
+    </ion-item-group>
+
+    <ion-toolbar color="purple">
+    <ion-badge item-right>{{issueCount1}}</ion-badge>
+        <ion-title>Resolution progress </ion-title>
+    </ion-toolbar>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    
+    
+    <ion-item-group *ngFor="let category1 of categories1; let i=index">
+        <ion-item-divider (click)="collapseCategory1(category1)" color="light"> {{category1 | uppercase}}
+            <ion-badge item-right>{{issuesList1[category1].length}}</ion-badge>
+        </ion-item-divider>
+        <ion-item *ngIf="collapse1 == category1">
+            <button ion-item *ngFor="let issue1 of issuesList1[category1];let i=index" (click)="issueSelected1(issue1)"> {{i+1}}. {{issue1.issue_desc}}</button>
+        </ion-item>
+    </ion-item-group>
 
 
+    <ion-toolbar color="purple">
+        <ion-badge item-right>{{issueCount1}}</ion-badge>
+            <ion-title>View/Update Issue  </ion-title>
+        </ion-toolbar>
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+    
 </ion-content>
+

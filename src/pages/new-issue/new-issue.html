@@ -1,107 +1,102 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="!did">New Issue</ion-title>
-    <ion-title *ngIf="did > 0 ">{{issueForm.controls.issue_desc.value}}</ion-title>
-  </ion-navbar>
+        <ion-title *ngIf="!did">New Issue</ion-title>
+        <ion-title *ngIf="did > 0 ">{{issueForm.controls.issue_desc.value}}</ion-title>
+    </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <form [formGroup]="issueForm">
-  <ion-list>
-    <ion-item>
-      <ion-label stacked>Domain</ion-label>
-      <ion-select 
-      [class.invalid]="!issueForm.controls.domain.valid && submitAttempt" 
-      formControlName="domain">
-        <ion-option (ionSelect)="domainSelected(domain)" *ngFor="let domain of domains" value="{{domain.value}}">{{domain.title}}</ion-option>
-      </ion-select>
-    </ion-item>
+    <form [formGroup]="issueForm">
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>Domain</ion-label>
+                <ion-select [class.invalid]="!issueForm.controls.domain.valid && submitAttempt" formControlName="domain">
+                    <ion-option (ionSelect)="domainSelected(domain)" *ngFor="let domain of domains" value="{{domain.value}}">{{domain.title}}</ion-option>
+                </ion-select>
+            </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Issue Description</ion-label>
-      <ion-input 
-      [class.invalid]="!issueForm.controls.issue_desc.valid && submitAttempt" 
-      formControlName="issue_desc" type="text"></ion-input>
-    </ion-item>
+            <ion-item>
+                <ion-label stacked>Issue Description</ion-label>
+                <ion-input [class.invalid]="!issueForm.controls.issue_desc.valid && submitAttempt" formControlName="issue_desc" type="text"></ion-input>
+            </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Location / Serial Number</ion-label>
-      <ion-input
-      [class.invalid]="!issueForm.controls.location.valid && submitAttempt" 
-       formControlName="location" type="text"></ion-input>
-    </ion-item>
+            <ion-item>
+                <ion-label stacked>Location / Serial Number</ion-label>
+                <ion-input [class.invalid]="!issueForm.controls.location.valid && submitAttempt" formControlName="location" type="text"></ion-input>
+            </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Impact / Problem</ion-label>
-      <ion-input 
-      [class.invalid]="!issueForm.controls.problem.valid && submitAttempt" 
-      formControlName="problem" type="text"></ion-input>
-    </ion-item>
+            <ion-item>
+                <ion-label stacked>Impact / Problem</ion-label>
+                <ion-input [class.invalid]="!issueForm.controls.problem.valid && submitAttempt" formControlName="problem" type="text"></ion-input>
+            </ion-item>
 
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Priority</ion-label>
-      <ion-select formControlName="priority">
-        <ion-option value="high">High</ion-option>
-        <ion-option value="medium">Medium</ion-option>
-        <ion-option value="low">Low</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Repaired On</ion-label>
-      <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="MMMM DD, YYYY HH:mm" formControlName="repaired_on"></ion-datetime>
-    </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Assigned to</ion-label>
-      <ion-input formControlName="repaired_by" type="text"></ion-input>
-    </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Date of Resolution</ion-label>
-      <ion-datetime displayFormat="YYYY-MM-DD" pickerFormat="MMMM DD, YYYY" formControlName="date_of_resolution"></ion-datetime>
-    </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Notes</ion-label>
-      <ion-input formControlName="notes" type="text"></ion-input>
-    </ion-item>
-    <ion-item *ngIf="did > 0 && _sharedService.role === 'admin' && (_sharedService.domain_admin && _sharedService.domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-      <ion-label stacked>Status</ion-label>
-      <ion-select formControlName="status">
-        <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option>
-      </ion-select>
-    </ion-item>
 
-    <ion-item>
-      <button ion-button icon-left (click)="presentActionSheet()">
+            <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Priority</ion-label>
+                <ion-select formControlName="priority">
+                    <ion-option value="high">High</ion-option>
+                    <ion-option value="medium">Medium</ion-option>
+                    <ion-option value="low">Low</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Status</ion-label>
+                <ion-select formControlName="status" (ionChange)="selStataus($event)">
+                    <ion-option *ngFor="let s of status"  value="{{s.value}}">{{s.title}}</ion-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="did > 0 &&  role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Repaired On</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="MMMM DD, YYYY HH:mm" formControlName="repaired_on"></ion-datetime>
+            </ion-item>
+            <ion-item *ngIf="did > 0 && showdays === 'assigned' && role === 'stf' && (domain_admin &&  domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Assigned to</ion-label>
+                <ion-input formControlName="repaired_by" type="text"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Date of Resolution</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD" pickerFormat="MMMM DD, YYYY" formControlName="date_of_resolution"></ion-datetime>
+            </ion-item>
+            <ion-item *ngIf="did > 0 && role === 'stf' && showdays === 'assigned'  && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                <ion-label stacked>Notes</ion-label>
+                <ion-input formControlName="notes" type="text"></ion-input>
+            </ion-item>
+            
+
+            <ion-item>
+                <button ion-button icon-left (click)="presentActionSheet()">
         <ion-icon name="camera"></ion-icon>Upload Photo
       </button>
-    </ion-item>
+            </ion-item>
 
-     <ion-list *ngIf="did > 0 && editImages.length">
-    <ion-item *ngFor="let image of editImages">
-      <button ion-button icon-only (click)="removeImage(image, 'edit')">
+            <ion-list *ngIf="did > 0 && editImages.length">
+                <ion-item *ngFor="let image of editImages">
+                    <button ion-button icon-only (click)="removeImage(image, 'edit')">
             <ion-icon name="close"></ion-icon>
           </button>
-      <img src="{{image}}" style="width: 100%">
-    </ion-item>
-  </ion-list>
+                    <img src="{{image}}" style="width: 100%">
+                </ion-item>
+            </ion-list>
 
-  <ion-list *ngIf="images.length">
-    <ion-item *ngFor="let image of images">
-      <button ion-button icon-only (click)="removeImage(image, 'new')">
+            <ion-list *ngIf="images.length">
+                <ion-item *ngFor="let image of images">
+                    <button ion-button icon-only (click)="removeImage(image, 'new')">
             <ion-icon name="close"></ion-icon>
           </button>
-      <img src="{{pathForImage(image)}}" style="width: 100%">
-    </ion-item>
-  </ion-list>
+                    <img src="{{pathForImage(image)}}" style="width: 100%">
+                </ion-item>
+            </ion-list>
 
-  </ion-list>
-  <button *ngIf="!did" type="submit" (click)="save()" ion-button block>Submit Issue</button>
-  <button *ngIf="did > 0"type="submit" (click)="save()" ion-button block>Update Issue</button>
-  </form>
- 
+        </ion-list>
+        <button *ngIf="!did" type="submit" (click)="save()" ion-button block>Submit Issue</button>
+        <button *ngIf="did > 0" type="submit" (click)="save()" ion-button block>Update Issue</button>
+    </form>
 
-  <!--<img src="{{pathForImage(lastImage)}}" style="width: 100%">-->
+
+    <!--<img src="{{pathForImage(lastImage)}}" style="width: 100%">-->
 </ion-content>

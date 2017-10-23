@@ -18,6 +18,7 @@ export class IssueDetailPage {
   images: Array<any> = [];
   domains;
   status;
+  role;
 
   constructor(
     private _apiService: ApiService,
@@ -38,7 +39,10 @@ export class IssueDetailPage {
       spinner: 'circles',
       content: 'Loading Please Wait...',
       // dismissOnPageChange: true
+      
     })
+     this.role = sessionStorage.getItem('roleadmin');
+    console.log(this.role);
     load.present();
     this._apiService.callApi(AppSettings.getIssueApi, 'post', { did: this.did })
       .subscribe(data => {
@@ -117,6 +121,4 @@ export class IssueDetailPage {
     });
     actionSheet.present();
   }
-
-
 }

@@ -5,6 +5,7 @@ export interface Issue {
     location: string;
     problem: string;
     raised_by: string;
+    reg_no: string;
     mobile: string;
     status?: string;
     priority?: string;
@@ -13,6 +14,7 @@ export interface Issue {
     date_of_resolution?: string;
     notes?: string;
     role: string;
+    role1:string;
     image?: string;
     deletedImages?: string;
     // raised_by_phonenumber?: string;

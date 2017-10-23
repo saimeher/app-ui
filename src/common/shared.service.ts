@@ -3,13 +3,20 @@ import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
+
 @Injectable()
 export class SharedService {
     public mobile: string;
     public name: string;
     public role: string;
+    public utype: string;
     public domain_admin: string;
-
+    public username: string;
+    public reg_no:string;
+    public firstname:string;
+    public token: string;
+    public roleadmin: string;
+    
     constructor(private toastCtrl: ToastController, private storage: Storage) {
 
 
@@ -28,6 +35,7 @@ export class SharedService {
         this.storage.ready().then(() => {
             this.storage.set(key, value);
         });
+        
     }
 
     getStorage(key) {

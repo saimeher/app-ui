@@ -1,8 +1,6 @@
 {
   "name": "Issue Register",
   "app_id": "",
-  "v2": true,
-  "typescript": true,
   "gulpStartupTasks": [
     "sass",
     "watch"
@@ -11,5 +9,7 @@
     "www/**/*",
     "!www/lib/**/*",
     "!www/**/*.map"
-  ]
+  ],
+  "integrations": {},
+  "type": "ionic-angular"
 }

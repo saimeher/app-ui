@@ -6,8 +6,14 @@
 
 <ion-content>
   <ion-tabs>
-    <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>
+    <!-- <ion-tab (click)="presentActionSheet()" tabTitle="Pending" tabIcon="list"></ion-tab> -->
+    <ion-tab [root]="tabPending"  tabTitle="Pending" tabIcon="list"></ion-tab>
     <ion-tab [root]="tabInProgress" tabTitle="In Progress" tabIcon="construct"></ion-tab>
-    <ion-tab [root]="tabClosed"  tabTitle="Closed" tabIcon="list-box"></ion-tab>
+    <!-- <ion-tab [root]="tabClosed"  tabTitle="Closed" tabIcon="list-box"></ion-tab> -->
+     <ion-tab (ionSelect)="presentActionSheet()" tabTitle="Closed" tabIcon="list-box"></ion-tab>
+    <!-- <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>
+    <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>
+    <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>  -->
+ 
   </ion-tabs>
 </ion-content>

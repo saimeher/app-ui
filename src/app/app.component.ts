@@ -5,8 +5,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { WelcomePage } from '../pages/pages';
+import {IssuesListPage } from '../pages/issues-list/issues-list';
 import { SharedService } from '../common/common';
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -47,9 +47,8 @@ export class MyApp {
     console.log("logout clicked");  
     this.menu.close();  
     this._sharedService.clearStorage();
+    
     this.nav.setRoot(WelcomePage);
-
   }
-
 
 }
