@@ -8,12 +8,12 @@
   <ion-tabs>
     <!-- <ion-tab (click)="presentActionSheet()" tabTitle="Pending" tabIcon="list"></ion-tab> -->
     <ion-tab [root]="tabPending"  tabTitle="Pending" tabIcon="list"></ion-tab>
+    <ion-tab [root]="tabAssigned" tabTitle="Assigned" tabIcon="list"></ion-tab>
+    <ion-tab [root]="tabOnhold" tabTitle="Onhold" tabIcon="list"></ion-tab>
     <ion-tab [root]="tabInProgress" tabTitle="In Progress" tabIcon="construct"></ion-tab>
-    <!-- <ion-tab [root]="tabClosed"  tabTitle="Closed" tabIcon="list-box"></ion-tab> -->
      <ion-tab (ionSelect)="presentActionSheet()" tabTitle="Closed" tabIcon="list-box"></ion-tab>
-    <!-- <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>
-    <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>
-    <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>  -->
- 
+   
+   <!-- <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>  --> -->
+  
   </ion-tabs>
 </ion-content>

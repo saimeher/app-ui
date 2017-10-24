@@ -39,6 +39,9 @@ export class NewIssuePage {
   role1;
   domain_admin;
   showdays = '';
+  searchQuery: string = '';
+  items = [];
+
 
   submitAttempt: boolean = false;
   tempPatch;      // if user is not admin, but tries to update status in another category (fixx)
@@ -51,7 +54,7 @@ export class NewIssuePage {
     raised_by: this._sharedService.username,
     mobile: this._sharedService.mobile,
     role: this._sharedService.role,
-    role1:sessionStorage.getItem('roleadmin'),
+    role1: sessionStorage.getItem('roleadmin'),
     reg_no: this._sharedService.reg_no,
     image: '',
     deletedImages: '',
@@ -81,16 +84,16 @@ export class NewIssuePage {
       location: ['', Validators.required],
       problem: ['', Validators.required],
       raised_by: [this._sharedService.username],
-      reg_no:[this._sharedService.reg_no],
+      reg_no: [this._sharedService.reg_no],
       mobile: [this._sharedService.mobile],
-      status: [''],
-      priority: [''],
-      repaired_on: [''],
-      repaired_by: [''],
-      date_of_resolution: [''],
-      notes: [''],
+      // status: [''],
+      // priority: [''],
+      // repaired_on: [''],
+      // repaired_by: [''],
+      // date_of_resolution: [''],
+      // notes: [''],
       role: [this._sharedService.role],
-      role1:sessionStorage.getItem('roleadmin'),
+      role1: sessionStorage.getItem('roleadmin'),
       image: [''],
       deletedImages: [''],
     })
@@ -100,11 +103,13 @@ export class NewIssuePage {
     this._sharedService.presentToast(domain.info, 'bottom');
   }
   ionViewDidEnter() {
+    this.initializeItems();
+
     this.role = sessionStorage.getItem('roleadmin');
     console.log(this.role);
     this.domain_admin = sessionStorage.getItem('domain_admin');
     console.log(this.domain_admin);
-    
+
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
     const _dateToIso = new DateToIso();
@@ -135,13 +140,13 @@ export class NewIssuePage {
               role: this._sharedService.role,
               image: temp.image,
               deletedImages: '',
-              
+
             });
-            console.log(this.did,'test');
-            
-              this.tempPatch = {
+            console.log(this.did, 'test');
+
+            this.tempPatch = {
               priority: temp.priority,
-              raised_by:temp.raised_by,
+              raised_by: temp.raised_by,
               repaired_by: temp.repaired_by,
               repaired_on: temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '',
               date_of_resolution: temp.date_of_resolution,
@@ -151,12 +156,6 @@ export class NewIssuePage {
             // console.log(this.tempPatch);
             // console.log("temp domain", temp.domain, this.domain_admin, (this.domain_admin && this.domain_admin.indexOf(temp.domain + ',') != -1));
             if (this._sharedService.roleadmin === 'stf' && (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
-              // this.issue.priority = temp.priority;
-              // this.issue.repaired_by = temp.repaired_by;
-              // this.issue.repaired_on = temp.repaired_on != null ? _dateToIso.transform(temp.repaired_on, null) : '';
-              // this.issue.date_of_resolution = temp.date_of_resolution;subscribe
-              // this.issue.notes = temp.notes;
-              // this.issue.status = temp.status;
             }
             // display images
             if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length) {
@@ -168,19 +167,13 @@ export class NewIssuePage {
           } else {
             this._sharedService.presentToast('Error retrieving data to edit');
           }
-        //   // for admin, disable fields that are submitted by user
-        //   if (this.issueForm.controls['reg_no'].value === this._sharedService.reg_no)
-        //  console.log('rec no555',this.issueForm.controls['reg_no'].value ,this._sharedService.reg_no);
-          
-         if(this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) 
-          {
-            // console.log('rec no',this.issueForm.controls['reg_no'].value ,this._sharedService.reg_no);
-            // this.issueForm.controls['domain'].disable();
-             this.issueForm.controls['issue_desc'].disable();
+          //   // for admin, disable fields that are submitted by user
+          if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
+            this.issueForm.controls['issue_desc'].disable();
             this.issueForm.controls['problem'].disable();
             this.issueForm.controls['location'].disable();
           }
-         
+
         }, error => {
           load.dismiss();
           this._sharedService.presentToast('Server error: ' + error);
@@ -199,7 +192,7 @@ export class NewIssuePage {
       this.issueForm.controls['problem'].enable();
       this.issueForm.controls['location'].enable();
     }
-    
+
     if (this.issueForm.valid) {
 
       if (this.issueForm.controls['did'].value > 0 && this.role === 'stf' && (this.domain_admin && this.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
@@ -254,44 +247,70 @@ export class NewIssuePage {
     })
 
     load.present();
-    this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
-      .subscribe(data => {
-        if (data.success) {
-          if (this.did) {
-            console.log(this.did,'test');
-            this._sharedService.presentToast('Issue updated successfully');
-          } 
-          else {
+    console.log(this.did);
+    if (this.did > 0) {
+      
+      console.log(this.issueForm.value.status);
+      
+        let value = {};
+        value['domain'] = this.issueForm.value.domain;
+        value['issue_desc'] = this.issueForm.value.issue_desc;
+        value['location'] = this.issueForm.value.location;
+        value['problem'] = this.issueForm.value.problem;
+        value['did'] = this.issueForm.controls['did'].value;
+        this._apiService.callApi(AppSettings.modifyIssue, 'post', value)
+          .subscribe(data => {
+            if (this.did) {
+              this._sharedService.presentToast('Issue updated successfully');
+            }
+            load.dismiss();
+            this.navCtrl.setRoot(IssuesListPage);
+          },
+          error => {
+            load.dismiss();
+            this._sharedService.presentToast('Server error: ' + error);
+          });
+    }
+
+    else {
+      console.log('hui');
+      this._apiService.callApi(AppSettings.INSERTISSUE, 'post', this.issueForm.value)
+        .subscribe(data => {
+          if (data) {
             this._sharedService.presentToast('Issue registered successfully');
           }
           load.dismiss();
-
-          // this.navCtrl.push(IssuesListPage);
-
           this.navCtrl.setRoot(IssuesListPage);
+        },
+        error => {
+          load.dismiss();
+          this._sharedService.presentToast('Server error: ' + error);
+        });
+    }
+    // this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
+    //   .subscribe(data => {
+    //     if (data.success) {
+    //       if (this.did) {
+    //         console.log(this.did, 'test');
+    //         this._sharedService.presentToast('Issue updated successfully');
+    //       }
+    //       else {
+    //         this._sharedService.presentToast('Issue registered successfully');
+    //       }
+    //       load.dismiss();
+    //       this.navCtrl.setRoot(IssuesListPage);
+    //     }
+    //     if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
+    //       this.issueForm.controls['issue_desc'].disable();
+    //       this.issueForm.controls['problem'].disable();
+    //       this.issueForm.controls['location'].disable();
+    //     }
+    //   },
 
-
-        }
-
-        // if admin, enable user fields for form submission
-        if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
-          // this.issueForm.controls['domain'].disable();
-          this.issueForm.controls['issue_desc'].disable();
-          this.issueForm.controls['problem'].disable();
-          this.issueForm.controls['location'].disable();
-        }
-      }, error => {
-        load.dismiss(); 
-        this._sharedService.presentToast('Server error: ' + error);
-
-        // if admin, enable user fields for form submission
-        // if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
-        //   // this.issueForm.controls['domain'].disable();
-        //   this.issueForm.controls['issue_desc'].disable();
-        //   this.issueForm.controls['problem'].disable();
-        //   this.issueForm.controls['location'].disable();
-        // }
-      });
+    //   error => {
+    //     load.dismiss();
+    //     this._sharedService.presentToast('Server error: ' + error);
+    //   });
 
 
 
@@ -510,7 +529,7 @@ export class NewIssuePage {
       });
     });
 
-    let p = Object.assign({}, this.issue, this.issueForm.value,this.role1);
+    let p = Object.assign({}, this.issue, this.issueForm.value, this.role1);
     const body = { issue: p };
     this.insertData(body);
   }
@@ -519,5 +538,39 @@ export class NewIssuePage {
     console.log(event);
     this.showdays = event;
     console.log(this.showdays);
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.initializeItems();
+
+    // set val to the value of the searchbar
+    let val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.items = this.items.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+  }
+  initializeItems() {
+    const vals = {
+      utype: 'adm',
+
+    }
+    this._apiService.callApi(AppSettings.getStaffData, 'post', vals).subscribe(dataa => {
+      // console.log(dataa);
+      for (var i = 0; i < dataa.data.data.length; i++) {
+        this.items[i] = {};
+
+        this.items[i]["id"] = dataa.data.data[i].reg_no;
+        this.items[i]["itemName"] = dataa.data.data[i].reg_no + ' - ' + dataa.data.data[i].name;
+        //  console.log( this.items);
+      }
+    });
+  }
+  selectItems(event) {
+    console.log(event);
   }
 }

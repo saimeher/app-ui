@@ -3,7 +3,8 @@ import { ActionSheetController, NavController, NavParams } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { AppSettings } from '../app.settings';
 import { SharedService, ApiService } from '../../common/common';
-import { NewIssuePage } from '../pages';
+import { NewIssuePage,CaretakeradminPage } from '../pages';
+
 import { LoadingController} from 'ionic-angular'
 
 @Component({
@@ -68,6 +69,8 @@ export class IssueDetailPage {
 
   edit() {
     this.navCtrl.push(NewIssuePage, this.did);
+
+    // this.navCtrl.push(CaretakeradminPage,this.did);
   }
 
   delete(status) {

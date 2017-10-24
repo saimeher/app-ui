@@ -40,6 +40,14 @@ export class AppSettings {
   public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissuesforuser';
   // public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissue';
   public static deleteApi = 'http://192.168.0.109/issue_register/api/delete_issue';
+  public static Toresolutionprogress ='http://192.168.0.109/issue_register/api/Toresolutionprogress';
+
+  public static  getStaffData: string = 'http://210.16.79.137/raghuerp/server/api/getStaffData';
+  public static INSERTISSUE ='http://192.168.0.109/issue_register/api/INSERTISSUE';
+  public static modifyIssue ='http://192.168.0.109/issue_register/api/modifyIssue';
+  public static UPDATEISSUE = 'http://192.168.0.109/issue_register/api/UPDATEISSUE';
+  public static  resolutioninprogress = 'http://192.168.0.109/issue_register/api/RESOLUTIONINPROGRESS';
+  
 
 
 
@@ -63,7 +71,7 @@ export class AppSettings {
     { title: 'Pending', value: 'pending' },
     { title: 'Assigned', value: 'assigned' },
     { title: 'Resolution in Progress ', value: 'resolution_in_progress' },
-    { title: 'On Hold', value: 'on_hold' },
+    { title: 'On Hold', value: 'onhold' },
     { title: 'Verified & Resolved', value: 'verified_resolved' },
     { title: 'Cannot be resolved / repaired', value: 'cannot_be_resolved' },
     { title: 'User Deleted', value: 'user_deleted' },

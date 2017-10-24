@@ -52,15 +52,6 @@
             <button ion-item *ngFor="let issue1 of issuesList1[category1];let i=index" (click)="issueSelected1(issue1)"> {{i+1}}. {{issue1.issue_desc}}</button>
         </ion-item>
     </ion-item-group>
-
-
-    <ion-toolbar color="purple">
-        <ion-badge item-right>{{issueCount1}}</ion-badge>
-            <ion-title>View/Update Issue  </ion-title>
-        </ion-toolbar>
-        <ion-refresher (ionRefresh)="doRefresh($event)">
-            <ion-refresher-content></ion-refresher-content>
-        </ion-refresher>
     
 </ion-content>
 

@@ -1,8 +1,8 @@
 <ion-header>
     <ion-navbar color="primary">
         <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+            <ion-icon name="menu"></ion-icon>
+        </button>
         <ion-title *ngIf="!did">New Issue</ion-title>
         <ion-title *ngIf="did > 0 ">{{issueForm.controls.issue_desc.value}}</ion-title>
     </ion-navbar>
@@ -34,7 +34,7 @@
                 <ion-input [class.invalid]="!issueForm.controls.problem.valid && submitAttempt" formControlName="problem" type="text"></ion-input>
             </ion-item>
 
-
+<!-- 
             <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
                 <ion-label stacked>Priority</ion-label>
                 <ion-select formControlName="priority">
@@ -46,7 +46,7 @@
             <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
                 <ion-label stacked>Status</ion-label>
                 <ion-select formControlName="status" (ionChange)="selStataus($event)">
-                    <ion-option *ngFor="let s of status"  value="{{s.value}}">{{s.title}}</ion-option>
+                    <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option>
                 </ion-select>
             </ion-item>
 
@@ -54,10 +54,17 @@
                 <ion-label stacked>Repaired On</ion-label>
                 <ion-datetime displayFormat="YYYY-MM-DD HH:mm" pickerFormat="MMMM DD, YYYY HH:mm" formControlName="repaired_on"></ion-datetime>
             </ion-item>
-            <ion-item *ngIf="did > 0 && showdays === 'assigned' && role === 'stf' && (domain_admin &&  domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
-                <ion-label stacked>Assigned to</ion-label>
-                <ion-input formControlName="repaired_by" type="text"></ion-input>
-            </ion-item>
+          
+                <ion-item *ngIf="did > 0 && showdays === 'assigned' && role === 'stf' && (domain_admin &&  domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
+                    <ion-label stacked>Assigned To</ion-label>
+                    <ion-select formControlName="repaired_by" (ionChange)="selectItems($event)">
+                          
+                        <ion-option *ngFor="let item of items" value="{{item.id}}">{{item.itemName}}</ion-option>
+                    </ion-select>
+                </ion-item>
+
+
+
             <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
                 <ion-label stacked>Date of Resolution</ion-label>
                 <ion-datetime displayFormat="YYYY-MM-DD" pickerFormat="MMMM DD, YYYY" formControlName="date_of_resolution"></ion-datetime>
@@ -65,20 +72,20 @@
             <ion-item *ngIf="did > 0 && role === 'stf' && showdays === 'assigned'  && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
                 <ion-label stacked>Notes</ion-label>
                 <ion-input formControlName="notes" type="text"></ion-input>
-            </ion-item>
-            
+            </ion-item> -->
+
 
             <ion-item>
                 <button ion-button icon-left (click)="presentActionSheet()">
-        <ion-icon name="camera"></ion-icon>Upload Photo
-      </button>
+                    <ion-icon name="camera"></ion-icon>Upload Photo
+                </button>
             </ion-item>
 
             <ion-list *ngIf="did > 0 && editImages.length">
                 <ion-item *ngFor="let image of editImages">
                     <button ion-button icon-only (click)="removeImage(image, 'edit')">
-            <ion-icon name="close"></ion-icon>
-          </button>
+                        <ion-icon name="close"></ion-icon>
+                    </button>
                     <img src="{{image}}" style="width: 100%">
                 </ion-item>
             </ion-list>
@@ -86,8 +93,8 @@
             <ion-list *ngIf="images.length">
                 <ion-item *ngFor="let image of images">
                     <button ion-button icon-only (click)="removeImage(image, 'new')">
-            <ion-icon name="close"></ion-icon>
-          </button>
+                        <ion-icon name="close"></ion-icon>
+                    </button>
                     <img src="{{pathForImage(image)}}" style="width: 100%">
                 </ion-item>
             </ion-list>

@@ -66,7 +66,7 @@
             <ion-col col-4 *ngIf="issue">
                 <button *ngIf="issue.status == 'user_deleted' ||  issue.status == 'user_resolved' || issue.status == 'verified_resolved'"
                     ion-button clear color="light"> </button>
-                <button *ngIf="issue.status == 'pending' ||  issue.status == 'assigned' || issue.status == 'on_hold'  ||  issue.status == 'resolution_in_progress'"
+                <button *ngIf="issue.status == 'pending' ||  issue.status == 'assigned' || issue.status == 'onhold'  ||  issue.status == 'resolution_in_progress'"
                     ion-button clear color="light" (click)="edit()">
                  <ion-chip #chip1>
                 <ion-icon name="logo-buffer" color="primary"></ion-icon>
@@ -74,7 +74,7 @@
                  </ion-chip>
                 </button>
             </ion-col>
-            <ion-col col-4 *ngIf="issue && issue.status != 'user_deleted' &&  issue.status != 'user_resolved'  &&  issue.status != 'verified_resolved'">
+            <ion-col col-4 *ngIf="issue && issue.status != 'user_deleted' &&  issue.status != 'user_resolved'  &&  issue.status != 'verified_resolved' && issue.status != 'onhold'  ">
                 <button *ngIf="issue && issue.reg_no == _sharedService.reg_no" ion-button clear color="light" (click)="presentActionSheet()">              
           <ion-chip #chip2>
               <ion-icon name="trash" color="danger"></ion-icon>

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage } from '../pages';
+import { IssueDetailPage, NewIssuePage ,CaretakerlistPage} from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -53,7 +53,6 @@ export class IssuesListPage {
       .subscribe(data => {
         console.log(data);
         if (data.success) {
-          console.log(JSON.stringify(data));
           this.categories = [];
           this.issuesList = [];
           let category;
@@ -168,13 +167,13 @@ export class IssuesListPage {
   }
   issueSelected1(issue1) {
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
+    this.navCtrl.push(CaretakerlistPage, {
       did: issue1.did
     });
   }
 
   collapseCategory1(category1) {
-    console.log('gxsdm');
+    
     if (this.collapse1 == category1) {
       this.collapse1  = '';
     } else {
