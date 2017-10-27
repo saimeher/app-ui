@@ -65,6 +65,7 @@ export class WelcomePage {
       let load = this.loadingCtrl.create({
         spinner: 'circles',
         content: 'Loading Please Wait...',
+        
         // dismissOnPageChange: true
       });
       load.present();
@@ -107,6 +108,7 @@ export class WelcomePage {
             sessionStorage.setItem('domain_admin',data.data.domain_admin);
              sessionStorage.setItem('roleadmin',data.data.role);
              sessionStorage.setItem('domain_admin',data.data.domain_admin);
+             this.navCtrl.setRoot(IssuesTabsPage);
           })
           console.log('roleadmin',sessionStorage.getItem('roleadmin'));
           console.log('domain_admin',sessionStorage.getItem('domain_admin'));
@@ -114,7 +116,7 @@ export class WelcomePage {
           
           // this.getRole();
           
-          this.navCtrl.setRoot(IssuesTabsPage);
+         
         }
         else {
           this.submitAttempt = false;

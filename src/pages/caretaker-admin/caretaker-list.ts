@@ -21,7 +21,7 @@ export class CaretakerlistPage {
   domains;
   status;
   role;
-
+  type;
   constructor(
     private _apiService: ApiService,
     private _sharedService: SharedService,
@@ -36,6 +36,7 @@ export class CaretakerlistPage {
 
   ionViewDidEnter() {
     this.did = this.navParams.get('did');
+    this.type = this.navParams.get('type');
 
      let load = this.loadingCtrl.create({
       spinner: 'circles',
@@ -69,7 +70,7 @@ export class CaretakerlistPage {
   }
 
   edit() {
-     this.navCtrl.push(CaretakeradminPage,this.did);
+     this.navCtrl.push(CaretakeradminPage,{did:this.did,type:this.type});
   }
 
   delete(status) {

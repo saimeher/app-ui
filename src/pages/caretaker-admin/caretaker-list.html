@@ -66,7 +66,7 @@
             <ion-col col-4 *ngIf="issue">
                 <button *ngIf="issue.status == 'user_deleted' ||  issue.status == 'user_resolved' || issue.status == 'verified_resolved'"
                     ion-button clear color="light"> </button>
-                <button *ngIf="issue.status == 'pending' ||  issue.status == 'assigned' || issue.status == 'onhold'  ||  issue.status == 'resolution_in_progress'"
+                <button *ngIf="issue.status == 'pending' ||  issue.status == 'assigned' || issue.status == 'onhold'  ||  issue.status == 'resolution_in_progress' || issue.status == 'closed'"
                     ion-button clear color="light" (click)="edit()">
                  <ion-chip #chip1>
                 <ion-icon name="logo-buffer" color="primary"></ion-icon>

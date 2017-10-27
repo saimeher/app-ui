@@ -27,14 +27,30 @@ $font-family-wp-base: "Ubuntu", "Sans", "Segoe UI", "Noto Sans", sans-serif;
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
+// $colors: (
+//   primary:    #387ef5,
+//   primary1:   #4468a1,
+//   secondary:  #32db64,
+//   danger:     #f53d3d,
+//   light:      #f4f4f4,
+//   dark:       #222,
+//   purple:   #ff9d00,
+//   orange:   #ff4000,
+ 
+// );
+
 $colors: (
   primary:    #387ef5,
+  // primary1:   #4468a1,
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
-  purple:   #ff9f00,
-  orange:   #ff4000,
+  // purple:   #ff0095,
+  orange:  rgb(255,117,0),
+  primary1:#2c67cc,
+
+  purple:#ff9d00,
  
 );
 

@@ -18,7 +18,7 @@
   <form novalidate [formGroup]="loginForm">
     <ion-list>
       <ion-item>
-        <ion-label floating>Mobile</ion-label>
+        <ion-label floating>Username</ion-label>
         <ion-input [class.invalid]="!loginForm.controls.mobile.valid && submitAttempt" formControlName="mobile" type="text"></ion-input>
       </ion-item>
 

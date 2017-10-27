@@ -70,8 +70,12 @@ export class ResolutionPage {
 
   edit() {
     console.log(this.type);
+    console.log(this.did);
     // this.navCtrl.push(ResolutionProgressPage, this.did);
-    this.navCtrl.push(ResolutionProgressPage, this.did, this.type);
+    this.navCtrl.push(ResolutionProgressPage,{
+      did: this.did,
+      type : this.type
+    });
     
   }
 

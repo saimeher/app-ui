@@ -26,7 +26,7 @@ export class ResolutionProgressPage {
   editImages: Array<any> = [];
   loading: Loading;
   newFileName: string;
-
+  today = new Date();
   did: number;
   type : string;
   domains: Array<{ title: string, value: string }>;
@@ -43,8 +43,7 @@ export class ResolutionProgressPage {
   expected_resolution_date;
   id;
   priority;
-  
-
+  disableSince;
 
   submitAttempt: boolean = false;
   tempPatch;      // if user is not admin, but tries to update status in another category (fixx)
@@ -77,12 +76,21 @@ export class ResolutionProgressPage {
         repairedtext:[''],
       });
   }
+
   domainSelected(domain) {
     let info = '';
     this._sharedService.presentToast(domain.info, 'bottom');
   }
+  curdate='';
   ionViewDidEnter() {
+
+    console.log('fgvsjhghfgsdhfsgdhfgsdhfgsdhfgsdhfg',this.today);
+    console.log(this.today.toISOString().toString().substr(0,10));
+    this.curdate=this.today.toISOString().toString().substr(0,10);
+
+
     // this.type = this.navParams.get('type');
+  //  this.disableSince: { year: this.today.getFullYear(), month: this.today.getMonth() + 1, day: this.today.getDate() + 1 }
     this.initializeItems();
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
@@ -90,9 +98,8 @@ export class ResolutionProgressPage {
     this.images = [];
     this.editImages = [];
     console.log(this.navParams.data);
-    if (this.navParams.data > 0) {
-      this.did = this.navParams.data;
-      this.type = this.navParams.data;
+     this.did = this.navParams.data.did;
+    this.type = this.navParams.data.type;
       if (this.did) {
         let load = this.loadingCtrl.create({
           spinner: 'circles',
@@ -135,7 +142,7 @@ export class ResolutionProgressPage {
           this._sharedService.presentToast('Server error: ' + error);
         });
       }
-    }
+    console.log(this.did,this.type);
   }
 
   insertData() {
@@ -152,7 +159,7 @@ export class ResolutionProgressPage {
       console.log('date is', this.expected_resolution_date);
       console.log(this.resolutioninform.value);
       let value = {};
-      value['expected_resolution_date'] = this.expected_resolution_date;
+      value['expected_resolution_date'] = this.resolutioninform.value.expected_resolution_date;
       value['resolutiontext'] = this.resolutioninform.value.resolutiontext;
       value['onholdtext'] = this.resolutioninform.value.onholdtext;
       value['cannottext'] = this.resolutioninform.value.cannottext;

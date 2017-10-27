@@ -3,12 +3,13 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,CaretakeradminPage,ResolutionPage } from '../pages';
+import { IssueDetailPage, NewIssuePage,CaretakeradminPage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'issues-list-assigned',
   templateUrl: 'issues-list-assigned.html',
+  
 })
 export class IssuesListAssignedPage {
   categories = [];
@@ -20,9 +21,11 @@ export class IssuesListAssignedPage {
   issueCount: number;
   issueCount1:number;
   issueCount3:number;
-  
+  type1 : string= 'assigned';
   refresher;
   issuesListlength=0;
+  issuesListlength1=0;
+  issuesListlength2=0;
 
 
   categories1 = [];
@@ -30,6 +33,7 @@ export class IssuesListAssignedPage {
 
   categories2 = [];
   issuesList2 = [];
+  role = sessionStorage.getItem('roleadmin');
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
@@ -113,12 +117,12 @@ export class IssuesListAssignedPage {
   getissuesforuser() {
     console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   // dismissOnPageChange: true
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'assigned' })
 
       .subscribe(data => {
@@ -143,16 +147,17 @@ export class IssuesListAssignedPage {
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             }
+            this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
           console.log(this.issuesList1);
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -161,8 +166,9 @@ export class IssuesListAssignedPage {
   }
   issueSelected1(issue1) {
     this.display = !this.display;
-    this.navCtrl.push(CaretakeradminPage,{
-      did: issue1.did
+    this.navCtrl.push(CaretakerlistPage,{
+      did: issue1.did,
+      type:this.type1
     });
   }
   collapseCategory1(category1) {
@@ -175,11 +181,11 @@ export class IssuesListAssignedPage {
 
 
   Resolutionprogress() {
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'assigned' })
       .subscribe(data => {
         console.log(data);
@@ -202,16 +208,16 @@ export class IssuesListAssignedPage {
               this.issuesList2[categoryTitle2].push({ did: item.did, issue_desc: item.issue_desc });
             }
             
-            // this.issuesListlength= this.issuesList[categoryTitle2].length;
+             this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -221,7 +227,8 @@ export class IssuesListAssignedPage {
   issueSelected2(issue2) {
     this.display = !this.display;
     this.navCtrl.push(ResolutionPage, {
-      did: issue2.did
+      did: issue2.did,
+      type : this.type1
     });
   }
   collapseCategory2(category2) {

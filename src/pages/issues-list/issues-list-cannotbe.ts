@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage } from '../pages';
+import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -16,14 +16,22 @@ export class IssuesListCannotbePage {
   display = false;
   collapse: string;
   collapse1: string;
+  collapse2: string;
   issueCount: number;
   issueCount1: number;
+  issueCount3: number;
   refresher;
   issuesListlength = 0;
-
+  issuesListlength1 = 0;
+  issuesListlength2 = 0;
+  type1: string ='cannot_be_resolved';
+  role = sessionStorage.getItem('roleadmin');
 
   categories1 = [];
   issuesList1 = [];
+
+  categories2 = [];
+  issuesList2 = [];
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
@@ -32,8 +40,10 @@ export class IssuesListCannotbePage {
     console.log('closedpage')
     this.collapse = '';
     this.collapse1 = '';
+    this.collapse2 = '';
     this.getIssuesList();
     this.getissuesforuser();
+    this.Resolutionprogress();
   }
 
   // get issues list to display as a list
@@ -70,6 +80,7 @@ export class IssuesListCannotbePage {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
               // this.issuesListlength= this.issuesList[categoryTitle].length;
             }
+            this.issuesListlength= this.issuesList[categoryTitle].length;
           });
         
         load.dismiss();
@@ -91,9 +102,6 @@ export class IssuesListCannotbePage {
       did: issue.did
     });
   }
-  showNewIssue() {
-    this.navCtrl.push(NewIssuePage);
-  }
   collapseCategory(category) {
     if (this.collapse == category) {
       this.collapse = '';
@@ -105,6 +113,7 @@ export class IssuesListCannotbePage {
     this.refresher = refresher;
     this.getIssuesList();
     this.getissuesforuser();
+    this.Resolutionprogress();
   }
 
   // Issues raised by me 
@@ -141,6 +150,7 @@ export class IssuesListCannotbePage {
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             }
+            this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
         }
         load.dismiss();
@@ -159,8 +169,10 @@ export class IssuesListCannotbePage {
 
   issueSelected1(issue1) {
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
-      did: issue1.did
+    this.navCtrl.push(CaretakerlistPage, {
+      did: issue1.did,
+      type : this.type1
+
     });
   }
   collapseCategory1(category1) {
@@ -169,6 +181,67 @@ export class IssuesListCannotbePage {
       this.collapse1 = '';
     } else {
       this.collapse1 = category1;
+    }
+  }
+
+  Resolutionprogress() {
+    console.log('username is', this._sharedService.reg_no);
+    let load = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: 'Loading Please Wait...',
+    })
+    load.present();
+    this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'cannot_be_resolved' })
+      .subscribe(data => {
+        console.log(data);
+        if (data.success) {
+          this.categories2 = [];
+          this.issuesList2 = [];
+          let category2;
+          let categoryTitle2;
+          console.log(data.data1);
+          this.issueCount3 = data.data1.length;
+          data.data1.forEach(item => {
+            if (item['domain'] != category2) {
+              category2 = item['domain'];
+              categoryTitle2 = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
+              this.categories2.push(categoryTitle2);
+              console.log(this.categories2);
+              this.issuesList2[categoryTitle2] = [];
+              this.issuesList2[categoryTitle2].push({ did: item.did, issue_desc: item.issue_desc });
+            } else {
+              this.issuesList2[categoryTitle2].push({ did: item.did, issue_desc: item.issue_desc });
+            }
+            
+             this.issuesListlength2= this.issuesList2[categoryTitle2].length;
+          });
+        }
+        load.dismiss();
+
+        if (this.refresher) {
+          this.refresher.complete();
+        }
+      }, error => {
+        load.dismiss();
+        if (this.refresher) {
+          this.refresher.complete();
+        }
+        this._sharedService.presentToast('Server error: ' + error);
+      });
+  }
+  issueSelected2(issue2) {
+    this.display = !this.display;
+    this.navCtrl.push(ResolutionPage, {
+      did: issue2.did,
+      type : this.type1
+    });
+  }
+  collapseCategory2(category2) {
+    console.log('gxsdm');
+    if (this.collapse2 == category2) {
+      this.collapse2 = '';
+    } else {
+      this.collapse2 = category2;
     }
   }
 }

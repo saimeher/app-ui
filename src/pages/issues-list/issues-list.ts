@@ -19,9 +19,11 @@ export class IssuesListPage {
   issueCount: number;
   issueCount1:number;
   refresher;
-  issuesListlength=0;
+  issuesListlength =0;
+  issuesListlength1 =0;
+  type1  : string = 'pending';
 
-
+ role1;
   categories1 = [];
   issuesList1 = [];
 
@@ -29,9 +31,11 @@ export class IssuesListPage {
   }
 
   ionViewDidEnter() {
-
-    console.log('listpage')
-    console.log('test', this._sharedService.getStorage('domain_admin'));
+    console.log('in pending page')
+   this.role1 = sessionStorage.getItem('roleadmin');
+  //  console.log(this.role1);
+  //   console.log('listpage')
+  //   console.log('test', this._sharedService.getStorage('domain_admin'));
     this.collapse = '';
     this.collapse1 = '';
     this.getIssuesList();
@@ -40,7 +44,6 @@ export class IssuesListPage {
 
   // get issues list to display as a list
   getIssuesList() {
-    console.log('username is', this._sharedService.reg_no);
 
     let load = this.loadingCtrl.create({
       spinner: 'hide',
@@ -51,14 +54,13 @@ export class IssuesListPage {
     
     this._apiService.callApi(AppSettings.getissuesforuser, 'post', { reg_no: this._sharedService.reg_no, type: 'pending' })
       .subscribe(data => {
-        console.log(data);
+      
         if (data.success) {
           this.categories = [];
           this.issuesList = [];
           let category;
           // let category1;
           let categoryTitle;
-          console.log(data.data1);
           this.issueCount = data.data1.length;
           // console.log(this.issueCount);
           console.log(data);
@@ -68,16 +70,12 @@ export class IssuesListPage {
               category = item['domain'];
               categoryTitle = this._sharedService.categorySearch(item['domain'], AppSettings.domains).title;
               this.categories.push(categoryTitle);
-              console.log(this.categories);
               this.issuesList[categoryTitle] = [];
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             }
-            console.log(this.issuesList[categoryTitle].length);
             this.issuesListlength= this.issuesList[categoryTitle].length;
-          
-            
           });
         }
         load.dismiss();
@@ -118,17 +116,9 @@ export class IssuesListPage {
   // Issues raised by me 
   getissuesforuser() {
     console.log('username is', this._sharedService.reg_no);
-
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'pending' })
-
       .subscribe(data => {
-        console.log(data);
+     
         if (data.success) {
           console.log(JSON.stringify(data.data));
           this.categories1 = [];
@@ -137,7 +127,6 @@ export class IssuesListPage {
           let categoryTitle1;
            this.issueCount1 = data.data.length;
           // console.log(this.issueCount);
-          console.log(data);
           //  this._sharedService.presentToast(this.issueCount1 + ' Issues pending', 'bottom', 1000);
           data.data.forEach(item => {
             if (item['domain'] != category1) {
@@ -149,16 +138,17 @@ export class IssuesListPage {
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             }
+            this.issuesListlength1= this.issuesList1[categoryTitle1].length;
+
           });
-          console.log(this.issuesList1);
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -168,10 +158,10 @@ export class IssuesListPage {
   issueSelected1(issue1) {
     this.display = !this.display;
     this.navCtrl.push(CaretakerlistPage, {
-      did: issue1.did
+      did: issue1.did,
+      type: this.type1
     });
   }
-
   collapseCategory1(category1) {
     
     if (this.collapse1 == category1) {

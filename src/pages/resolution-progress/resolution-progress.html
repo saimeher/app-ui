@@ -3,44 +3,69 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title >ghf</ion-title>
+        <ion-title>fd</ion-title>
+        
     </ion-navbar>
 </ion-header>
 <ion-content padding>
     <form [formGroup]="resolutioninform">
         <ion-list>
-             <ion-item>
+
+            <ion-item *ngIf="type == 'onhold'">
                 <ion-label stacked>Status</ion-label>
                 <ion-select formControlName="status" (ionChange)="selStataus($event)">
                     <!-- <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option> -->
-                        <ion-option value="pending">Pending</ion-option>
-                        <ion-option value="assigned">Assigned  </ion-option>
-                        <ion-option selected value="resolution_in_progress">Resolution in Progress</ion-option>   
-                        <ion-option value="onhold">On Hold  </ion-option>
-                        <ion-option value="cannot_be_resolved">Cannot be resolved</ion-option>
-                        <ion-option selected value="verified_resolved">Verified & Resolved</ion-option>         
-                        <ion-option value="closed">Closed</ion-option> 
-                        <!-- <option value="user_resolved">User Resolved  </option>  -->
-                        <!-- <option value="user_deleted">User Deleted  </option> -->
+                    <ion-option selected value="resolution_in_progress">Resolution in Progress</ion-option>
+                    <ion-option value="onhold">On Hold </ion-option>
+                    <ion-option value="cannot_be_resolved">Cannot be resolved</ion-option>
+                    <ion-option value="closed">Closed</ion-option>
                 </ion-select>
             </ion-item>
-           
-            <ion-item *ngIf ="showdays == 'resolution_in_progress'" >
-                <ion-label stacked>Expected Resolution Date</ion-label>
-                <ion-datetime displayFormat="YYYY-MM-DD" pickerFormat="MMMM DD, YYYY" formControlName="expected_resolution_date"></ion-datetime>
+
+            <ion-item *ngIf="type == 'resolution_in_progress'">
+                <ion-label stacked>Status</ion-label>
+                <ion-select formControlName="status" (ionChange)="selStataus($event)">
+                    <!-- <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option> -->
+                    <ion-option value="closed">Closed</ion-option>
+                </ion-select>
             </ion-item>
-            <ion-item *ngIf = "showdays == 'onhold'">
+
+            <ion-item *ngIf="type == 'assigned'">
+                <ion-label stacked>Status</ion-label>
+                <ion-select formControlName="status" (ionChange)="selStataus($event)">
+                    <!-- <ion-option *ngFor="let s of status" value="{{s.value}}">{{s.title}}</ion-option> -->
+                    <ion-option value="assigned">Assigned </ion-option>
+                    <ion-option selected value="resolution_in_progress">Resolution in Progress</ion-option>
+                    <ion-option value="onhold">On Hold </ion-option>
+                    <ion-option value="cannot_be_resolved">Cannot be resolved</ion-option>
+                    <ion-option value="closed">Closed</ion-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="showdays == 'resolution_in_progress'">
+                <ion-label stacked>Expected Resolution Date</ion-label>
+                <ion-datetime displayFormat="DD-MMM-YYYY" min="{{curdate}}" pickerFormat="MMMM DD, YYYY" formControlName="expected_resolution_date"></ion-datetime>
+            </ion-item>
+
+            <ion-item *ngIf="showdays == 'resolution_in_progress'">
+                <ion-label stacked>Notes</ion-label>
+                <ion-input formControlName="resolutiontext" type="text"></ion-input>
+            </ion-item>
+            <!-- min="2017-10-28" -->
+            <ion-item *ngIf="showdays == 'onhold'">
                 <ion-label stacked>Notes</ion-label>
                 <ion-input formControlName="onholdtext" type="text"></ion-input>
-            </ion-item> 
-            <ion-item *ngIf = "showdays == 'cannot_be_resolved'">
+            </ion-item>
+
+            <ion-item *ngIf="showdays == 'cannot_be_resolved'">
                 <ion-label stacked>Notes</ion-label>
                 <ion-input formControlName="cannottext" type="text"></ion-input>
-            </ion-item> 
-            <ion-item *ngIf = "showdays == 'closed'">
+            </ion-item>
+            
+            <ion-item *ngIf="showdays == 'closed'">
                 <ion-label stacked>Notes</ion-label>
                 <ion-input formControlName="repairedtext" type="text"></ion-input>
-            </ion-item> 
+            </ion-item>
 
         </ion-list>
         <!-- <button *ngIf="!did" type="submit" (click)="save()" ion-button block>Submit Issue</button> -->

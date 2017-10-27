@@ -15,6 +15,7 @@ export class MyApp {
 
   // make HelloIonicPage the root (or first) page
   rootPage: any = WelcomePage;
+  role = sessionStorage.getItem('roleadmin');
 
   constructor(
     public platform: Platform,
@@ -47,7 +48,8 @@ export class MyApp {
     console.log("logout clicked");  
     this.menu.close();  
     this._sharedService.clearStorage();
-    
+    // this.role='';    
+    sessionStorage.clear();
     this.nav.setRoot(WelcomePage);
   }
 

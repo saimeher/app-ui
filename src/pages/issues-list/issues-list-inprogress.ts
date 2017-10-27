@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage } from '../pages';
+import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -22,9 +22,11 @@ export class IssuesListInProgressPage {
   issueCount1: number;
   issueCount3:number;
   refresher;
+  type1 : string= 'resolution_in_progress';
   issuesListlength = 0;
-
-
+  issuesListlength1 = 0;
+  issuesListlength2 = 0;
+  role = sessionStorage.getItem('roleadmin');
   categories1 = [];
   issuesList1 = [];
 
@@ -76,8 +78,8 @@ export class IssuesListInProgressPage {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
-              // this.issuesListlength= this.issuesList[categoryTitle].length;
             }
+             this.issuesListlength= this.issuesList[categoryTitle].length;
           });
         }
         load.dismiss();
@@ -99,9 +101,6 @@ export class IssuesListInProgressPage {
       did: issue.did
     });
   }
-  showNewIssue() {
-    this.navCtrl.push(NewIssuePage);
-  }
   collapseCategory(category) {
     console.log('hi');
     if (this.collapse == category) {
@@ -122,11 +121,11 @@ export class IssuesListInProgressPage {
   getissuesforuser() {
     console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'in_progress' })
 
       .subscribe(data => {
@@ -150,18 +149,18 @@ export class IssuesListInProgressPage {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
-
             }
+            this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
           console.log(this.issuesList1);
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -171,7 +170,7 @@ export class IssuesListInProgressPage {
   issueSelected1(issue1) {
     console.log('resolution');
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
+    this.navCtrl.push(CaretakerlistPage, {
       did: issue1.did
     });
   }
@@ -185,11 +184,11 @@ export class IssuesListInProgressPage {
   }
   Resolutionprogress() {
     console.log('username is', this._sharedService.reg_no);
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'in_progress'})
       .subscribe(data => {
         console.log(data);
@@ -212,16 +211,16 @@ export class IssuesListInProgressPage {
               this.issuesList2[categoryTitle2].push({ did: item.did, issue_desc: item.issue_desc });
             }
 
-            // this.issuesListlength= this.issuesList[categoryTitle2].length;
+             this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -230,8 +229,9 @@ export class IssuesListInProgressPage {
   }
   issueSelected2(issue2) {
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
-      did: issue2.did
+    this.navCtrl.push(ResolutionPage, {
+      did: issue2.did,
+      type : this.type1
     });
   }
   collapseCategory2(category2) {
@@ -241,7 +241,4 @@ export class IssuesListInProgressPage {
       this.collapse2 = category2;
     }
   }
-
-
-
 }

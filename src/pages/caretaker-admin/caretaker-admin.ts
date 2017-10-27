@@ -5,7 +5,7 @@ import { Camera, File, Transfer, FilePath } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, Issue, DeviceService, SharedService, DateToIso } from '../../common/common';
-import { IssuesListPage } from '../pages';
+import { IssuesListPage,IssuesTabsPage } from '../pages';
 
 declare var cordova: any;
 
@@ -39,7 +39,11 @@ export class CaretakeradminPage {
   showdays = '';
   searchQuery: string = '';
   items = [];
-id;
+  id;
+  today = new Date()
+type;
+status1;
+issue_desc;
 
 
   submitAttempt: boolean = false;
@@ -66,6 +70,8 @@ id;
             cannottext:[''],
             repaired_on: [''],
             repaired_by: [],
+            resolutiontext:[''],
+            expected_resolution_date:[''],
             date_of_resolution: new FormControl(),
             notes: [],
             did: []
@@ -75,15 +81,22 @@ id;
     let info = '';
     this._sharedService.presentToast(domain.info, 'bottom');
   }
+  curdate='';
   ionViewDidEnter() {
+    console.log('fgvsjhghfgsdhfsgdhfgsdhfgsdhfgsdhfg',this.today);
+    console.log(this.today.toISOString().toString().substr(0,10));
+    this.curdate=this.today.toISOString().toString().substr(0,10);
+
     this.initializeItems();
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
     const _dateToIso = new DateToIso();
     this.images = [];
     this.editImages = [];
-    if (this.navParams.data > 0) {
-      this.did = this.navParams.data;
+    this.did = this.navParams.data.did;
+    this.type = this.navParams.data.type;
+    console.log(this.did,this.type);
+   
       if (this.did) {
         let load = this.loadingCtrl.create({
           spinner: 'circles',
@@ -95,6 +108,7 @@ id;
           load.dismiss();
           if (data.success) {
             let temp = data.data[0];
+            this.status1 = temp.status;
             this.taskeditForm.patchValue({
               did: this.did,
               domain: temp.domain,
@@ -113,8 +127,9 @@ id;
               date_of_resolution: temp.date_of_resolution,
               notes: temp.notes,
               status: temp.status
-
             });
+            this.issue_desc = temp.issue_desc;
+            this.status1 = temp.status;
             console.log(temp, 'test');
 
             // this.tempPatch = {
@@ -139,7 +154,6 @@ id;
         });
       }
     }
-  }
 
   insertData() {
 
@@ -161,6 +175,8 @@ id;
       edit['assignedtext']= this.taskeditForm.value.assignedtext;
       edit['onholdtext']= this.taskeditForm.value.onholdtext;
     //   edit['date_of_resolution']= this.date_of_resolution;
+    edit['expected_resolution_date'] = this.taskeditForm.value.expected_resolution_date;
+    edit['resolutiontext'] = this.taskeditForm.value.resolutiontext;
       edit['notes'] = this.taskeditForm.value.notes;
       edit['cannottext'] = this.taskeditForm.value.cannottext;
       edit['did'] = this.did;
@@ -169,20 +185,28 @@ id;
         .subscribe(data => {
           if (data) {
             this._sharedService.presentToast('Issue updated successfully');
+            // this.navCtrl.setRoot(IssuesListPage);
           }
+          console.log('hgfdsyhg');
+
+          // this.navCtrl.setRoot(IssuesListPage);
+          // this.navCtrl.setRoot(IssuesTabsPage);
+          this.navCtrl.popToRoot();
+          // this.navCtrl.
           
-          this.navCtrl.setRoot(IssuesListPage);
         },
         error => {
           load.dismiss();
           this._sharedService.presentToast('Server error: ' + error);
         });
     }
+
     selStataus(event) {
       console.log(event);
       this.showdays = event;
       console.log(this.showdays);
     }
+
     initializeItems() {
       const vals = {
         utype: 'adm',

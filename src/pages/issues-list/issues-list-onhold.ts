@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,ResolutionPage } from '../pages';
+import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -23,6 +23,9 @@ export class IssuesListOnholdPage {
   refresher;
   type1 : string= 'onhold';
   issuesListlength=0;
+  issuesListlength1=0;
+  issuesListlength2=0;
+  role = sessionStorage.getItem('roleadmin');
 
 
   categories1 = [];
@@ -126,12 +129,12 @@ export class IssuesListOnholdPage {
   getissuesforuser() {
     console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   // dismissOnPageChange: true
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'onhold' })
 
       .subscribe(data => {
@@ -155,17 +158,17 @@ export class IssuesListOnholdPage {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
-            }
+            }this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
           console.log(this.issuesList1);
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -174,8 +177,9 @@ export class IssuesListOnholdPage {
   }
   issueSelected1(issue1) {
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
-      did: issue1.did
+    this.navCtrl.push(CaretakerlistPage, {
+      did: issue1.did,
+      type : this.type1
     });
   }
 
@@ -192,11 +196,11 @@ export class IssuesListOnholdPage {
   
   Resolutionprogress() {
     console.log('username is', this._sharedService.reg_no);
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'onhold' })
       .subscribe(data => {
         console.log(data);
@@ -219,16 +223,16 @@ export class IssuesListOnholdPage {
               this.issuesList2[categoryTitle2].push({ did: item.did, issue_desc: item.issue_desc });
             }
             
-            // this.issuesListlength= this.issuesList[categoryTitle2].length;
+           this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }

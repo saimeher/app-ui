@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage } from '../pages';
+import { IssueDetailPage, NewIssuePage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -20,11 +20,12 @@ export class IssuesListUsdeletedPage {
   issueCount: number;
   issueCount1: number;
   refresher;
+  type1 : string ='user_deleted';
   issuesListlength = 0;
-
-
+  issuesListlength2 = 0;
   categories1 = [];
   issuesList1 = [];
+  role = sessionStorage.getItem('roleadmin');
 
   constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
@@ -69,8 +70,9 @@ export class IssuesListUsdeletedPage {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
             } else {
               this.issuesList[categoryTitle].push({ did: item.did, issue_desc: item.issue_desc });
-              // this.issuesListlength= this.issuesList[categoryTitle].length;
             }
+        this.issuesListlength= this.issuesList[categoryTitle].length;
+        
           });
         
         load.dismiss();
@@ -91,9 +93,6 @@ export class IssuesListUsdeletedPage {
     this.navCtrl.push(IssueDetailPage, {
       did: issue.did
     });
-  }
-  showNewIssue() {
-    this.navCtrl.push(NewIssuePage);
   }
   collapseCategory(category) {
     if (this.collapse == category) {
@@ -142,6 +141,8 @@ export class IssuesListUsdeletedPage {
             } else {
               this.issuesList1[categoryTitle1].push({ did: item.did, issue_desc: item.issue_desc });
             }
+        this.issuesListlength2= this.issuesList1[categoryTitle1].length;
+        
           });
         }
         load.dismiss();
@@ -160,8 +161,9 @@ export class IssuesListUsdeletedPage {
 
   issueSelected1(issue1) {
     this.display = !this.display;
-    this.navCtrl.push(IssueDetailPage, {
-      did: issue1.did
+    this.navCtrl.push(CaretakerlistPage, {
+      did: issue1.did,
+      type: this.type1
     });
   }
   collapseCategory1(category1) {
@@ -172,4 +174,6 @@ export class IssuesListUsdeletedPage {
       this.collapse1 = category1;
     }
   }
+
+  
 }
