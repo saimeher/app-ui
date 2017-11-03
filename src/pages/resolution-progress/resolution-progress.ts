@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators,FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
-import { Camera, File, Transfer, FilePath } from 'ionic-native';
 import { AlertController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
-import { ApiService, Issue, DeviceService, SharedService, DateToIso } from '../../common/common';
-import { IssuesListPage } from '../pages';
+import { ApiService, DeviceService, SharedService, DateToIso } from '../../common/common';
 
 declare var cordova: any;
 
@@ -44,6 +42,7 @@ export class ResolutionProgressPage {
   id;
   priority;
   disableSince;
+  issue='';
 
   submitAttempt: boolean = false;
   tempPatch;      // if user is not admin, but tries to update status in another category (fixx)
@@ -76,11 +75,6 @@ export class ResolutionProgressPage {
         repairedtext:[''],
       });
   }
-
-  domainSelected(domain) {
-    let info = '';
-    this._sharedService.presentToast(domain.info, 'bottom');
-  }
   curdate='';
   ionViewDidEnter() {
 
@@ -97,8 +91,7 @@ export class ResolutionProgressPage {
     const _dateToIso = new DateToIso();
     this.images = [];
     this.editImages = [];
-    console.log(this.navParams.data);
-     this.did = this.navParams.data.did;
+    this.did = this.navParams.data.did;
     this.type = this.navParams.data.type;
       if (this.did) {
         let load = this.loadingCtrl.create({
@@ -111,6 +104,7 @@ export class ResolutionProgressPage {
           load.dismiss();
           if (data.success) {
             let temp = data.data[0];
+            this.issue = data.data[0].issue_desc;
             this.resolutioninform.patchValue({
               did: this.did,
               domain: temp.domain,
@@ -171,9 +165,13 @@ export class ResolutionProgressPage {
         .subscribe(data => {
           if (data) {
             this._sharedService.presentToast('Issue updated successfully');
+            this.navCtrl.popToRoot();
+          }
+          else{
+            this._sharedService.presentToast('Please fill the required fields');
           }
           
-          this.navCtrl.setRoot(IssuesListPage);
+          
         },
         error => {
           load.dismiss();

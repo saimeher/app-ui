@@ -12,8 +12,8 @@
   <ion-content>
   
       <ion-toolbar  color="orange">
-          <ion-badge item-right>{{issueCount}}</ion-badge>
-          <ion-title>Issues raised by me </ion-title>
+          <ion-badge style="float:right; margin-right:4px">{{issueCount}}</ion-badge>
+          <ion-title>Raised by me </ion-title>
       </ion-toolbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -34,16 +34,16 @@
     </ion-item-group>
     
    
-  <ion-toolbar *ngIf="role == 'stf'" color="orange">
-      <ion-badge item-right>{{issueCount1}}</ion-badge>
-    <ion-title>View/Update Issues</ion-title>
+  <ion-toolbar *ngIf="issuesListlength1 > 0  && role == 'stf'" color="orange">
+      <ion-badge style="float:right; margin-right:4px">{{issueCount1}}</ion-badge>
+    <ion-title>Pending for action</ion-title>
   </ion-toolbar>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="issuesListlength1 == 0  && role == 'stf'">
+  <!-- <ion-list *ngIf="issuesListlength1 == 0  && role == 'stf'">
       <p style="font-size:18px;margin-left:18px">no data</p>
-  </ion-list>
+  </ion-list> -->
   
   <ion-item-group *ngFor="let category1 of categories1; let i=index">
     <ion-item-divider (click)="collapseCategory1(category1)" color="light"> {{category1 | uppercase}}
@@ -53,20 +53,18 @@
         <button ion-item *ngFor="let issue1 of issuesList1[category1];let i=index" (click)="issueSelected1(issue1)"> {{i+1}}. {{issue1.issue_desc}}</button>
     </ion-item>
   </ion-item-group>
-
-
   
-  <ion-toolbar color="orange">
-    <ion-badge item-right>{{issueCount3}}</ion-badge>
-    <ion-title>Resolution progress </ion-title>
+  <ion-toolbar *ngIf="issuesListlength2  > 0 " color="orange">
+    <ion-badge style="float:right; margin-right:4px">{{issueCount3}}</ion-badge>
+    <ion-title> Assigned to me </ion-title>
 </ion-toolbar>
 <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
 </ion-refresher>
 
-<ion-list *ngIf="issuesListlength2  == 0 ">
+<!-- <ion-list *ngIf="issuesListlength2  == 0 ">
   <p style="font-size:18px;margin-left:18px">no data</p>
-</ion-list>
+</ion-list> -->
 
 <ion-item-group *ngFor="let category2 of categories2; let i=index">
     <ion-item-divider (click)="collapseCategory2(category2)" color="light"> {{category2 | uppercase}}

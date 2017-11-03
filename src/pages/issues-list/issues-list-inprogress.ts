@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
+import { IssueDetailPage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -182,6 +182,8 @@ export class IssuesListInProgressPage {
       this.collapse1 = category1;
     }
   }
+
+  
   Resolutionprogress() {
     console.log('username is', this._sharedService.reg_no);
     // let load = this.loadingCtrl.create({

@@ -4,8 +4,7 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { WelcomePage } from '../pages/pages';
-import {IssuesListPage } from '../pages/issues-list/issues-list';
+import { WelcomePage, IssuesTabsPage } from '../pages/pages';
 import { SharedService } from '../common/common';
 @Component({
   templateUrl: 'app.html'
@@ -51,6 +50,11 @@ export class MyApp {
     // this.role='';    
     sessionStorage.clear();
     this.nav.setRoot(WelcomePage);
+  }
+  home()
+  {
+    this.menu.close();
+    this.nav.setRoot(IssuesTabsPage);
   }
 
 }

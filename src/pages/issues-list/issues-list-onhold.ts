@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
+import { IssueDetailPage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -69,8 +69,7 @@ export class IssuesListOnholdPage {
           this.issuesList = [];
           let category;
           // let category1;
-          let categoryTitle;
-          console.log(data.data1);
+          let categoryTitle; 
           this.issueCount = data.data1.length;
           // console.log(this.issueCount);
           console.log(data);

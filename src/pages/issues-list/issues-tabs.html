@@ -1,19 +1,104 @@
+<!-- <ion-header>
+</ion-header> -->
 <ion-header>
-  <!--<ion-toolbar color="secondary">
-    <ion-title>Issues List</ion-title>
-  </ion-toolbar>-->
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="md-menu"></ion-icon>
+    </button>
+    <ion-title>Home Page</ion-title>
+  </ion-navbar>
+  <ion-toolbar color="primary1">
+    <ion-fab color="primary1" middle right>
+      <button (click)="showNewIssue()" ion-fab mini color="orange">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-title>Add an Issue</ion-title>
+  </ion-toolbar>
 </ion-header>
-
 <ion-content>
-  <ion-tabs>
-    <!-- <ion-tab (click)="presentActionSheet()" tabTitle="Pending" tabIcon="list"></ion-tab> -->
-    <ion-tab [root]="tabPending"  tabTitle="Pending" tabIcon="list"></ion-tab>
-    <ion-tab [root]="tabAssigned" tabTitle="Assigned" tabIcon="man"></ion-tab>
-    <ion-tab [root]="tabOnhold" tabTitle="Onhold" tabIcon="pause"></ion-tab>
-    <ion-tab [root]="tabInProgress" tabTitle="In Progress" tabIcon="construct"></ion-tab>
-     <ion-tab (ionSelect)="presentActionSheet()" tabTitle="Closed" tabIcon="list-box"></ion-tab>
-   
-   <!-- <ion-tab [root]="tabPending" tabTitle="Pending" tabIcon="list"></ion-tab>  --> -->
-  
-  </ion-tabs>
+    <!-- (click)="pendinglist()" -->
+  <ion-card (click)="pendinglist()" >
+
+    <ion-card-header color="code">
+      <ion-badge *ngIf="role =='stf'" style="float:right;">{{pen}}</ion-badge>
+     
+          <h1 class="title">Pending</h1>
+      
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col  style="font-size: 18px;" col-5>pending <ion-badge *ngIf="role =='stf'">{{pending}}</ion-badge></ion-col>
+          <ion-col style="font-size: 18px;"  col-5>assigned <ion-badge *ngIf="role =='stf'">{{assigned}}</ion-badge></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="font-size: 18px;" col-6>on hold <ion-badge *ngIf="role =='stf'">{{onhold}}</ion-badge></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+
+  </ion-card>
+
+
+  <ion-card (click)="inprogress()">
+    <ion-card-header  color="code" >
+      <ion-badge *ngIf="role =='stf'" style="float:right;">{{pen1}}</ion-badge>
+      <h1 class="title">In progress</h1>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col style="font-size: 17px;" col-12>Resolution in progress <ion-badge *ngIf="role =='stf'">{{resolution}}</ion-badge></ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+
+    <!-- <ion-card-content (click)="inprogress()">
+    </ion-card-content> -->
+
+  </ion-card>
+
+  <ion-card (click)="closed()">
+    <ion-card-header  color="code">
+      <!-- <ion-badge style ="float:right;">{{verified_resolved_tot}} V</ion-badge>
+        <ion-badge style ="float:right;">{{closed_tot}}C</ion-badge>
+        <ion-badge style ="float:right;">{{cannot_be_resolved_tot}} C</ion-badge>
+        <ion-badge style ="float:right;">{{user_deleted_tot}} U</ion-badge> -->
+      <ion-badge *ngIf="role =='stf'" style="float:right;">{{pen2}}</ion-badge>
+
+      <h1 class="title">Closed</h1>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col style="font-size: 17px;" col-6>User deleted  <ion-badge *ngIf="role =='stf'">{{user_deleted}}</ion-badge></ion-col>
+            <ion-col style="font-size: 17px;" col-5>closed  <ion-badge *ngIf="role =='stf'">{{closed1}}</ion-badge></ion-col>
+          </ion-row>
+          <ion-row>
+          <ion-col style="font-size: 18px;" col-12>cannot be resolved  <ion-badge *ngIf="role =='stf'">{{cannot}}</ion-badge></ion-col>
+        </ion-row>
+          <ion-row>
+              <ion-col style="font-size: 18px;" col-12>verified & resolved  <ion-badge *ngIf="role =='stf'">{{verified}}</ion-badge></ion-col>
+            </ion-row>
+        </ion-grid>
+      </ion-card-content>
+
+    <!-- <ion-card-content (click)="closed()">
+    </ion-card-content> -->
+  </ion-card>
+
+  <!-- 
+  <button  ion-button icon-start>
+    <!-<ion-icon name="construct"></ion-icon> 
+    In progress
+  </button>
+  <button  ion-button icon-start>
+    <!-- <ion-icon name="list-box"></ion-icon> 
+    Closed
+  </button> -->
 </ion-content>
+
+
+

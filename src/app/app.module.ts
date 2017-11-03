@@ -5,7 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
-import { WelcomePage, RegisterPage, NewIssuePage, IssuesListPage, IssueDetailPage, IssuesTabsPage, IssuesListClosedPage, IssuesListInProgressPage,IssuesListUsdeletedPage,IssuesListVerifiedPage,IssuesListCannotbePage,IssuesListAssignedPage,IssuesListOnholdPage,CaretakeradminPage,CaretakerlistPage,ResolutionProgressPage,ResolutionPage } from '../pages/pages';
+import { WelcomePage, RegisterPage, NewIssuePage, IssuesListPage, IssueDetailPage, IssuesTabsPage, IssuesListClosedPage, IssuesListInProgressPage,IssuesListUsdeletedPage,IssuesListVerifiedPage,IssuesListCannotbePage,IssuesListAssignedPage,IssuesListOnholdPage,CaretakeradminPage,CaretakerlistPage,ResolutionProgressPage,ResolutionPage,PendingListPage, ClosedListPage } from '../pages/pages';
 import { ApiService, DeviceService, SharedService, DateToIso } from '../common/common';
 
 
@@ -28,8 +28,9 @@ import { ApiService, DeviceService, SharedService, DateToIso } from '../common/c
     CaretakeradminPage,
     CaretakerlistPage,
     ResolutionProgressPage,
-    ResolutionPage, 
-
+    ResolutionPage,
+    PendingListPage,
+ClosedListPage,
 
     DateToIso
   ],
@@ -60,7 +61,8 @@ import { ApiService, DeviceService, SharedService, DateToIso } from '../common/c
     CaretakerlistPage,
     ResolutionPage,
     ResolutionProgressPage,
- 
+    PendingListPage,
+    ClosedListPage,
   ],
   providers: [
     StatusBar,

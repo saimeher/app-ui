@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
-import { RegisterPage, IssuesTabsPage } from '../pages';
+import { IssuesTabsPage} from '../pages';
 import { ApiService, SharedService } from '../../common/common';
 import { Observable } from 'rxjs/Observable';
 import { LoadingController } from 'ionic-angular';
@@ -55,9 +55,9 @@ export class WelcomePage {
       this._sharedService.presentToast('Server error: ' + error);
     })
   }
-  showRegister() {
-    this.navCtrl.push(RegisterPage);
-  }
+  // showRegister() {
+  //   this.navCtrl.push(RegisterPage);
+  // }
   login() {
     this.submitAttempt = true;
     if (this.loginForm.valid) {
@@ -109,6 +109,7 @@ export class WelcomePage {
              sessionStorage.setItem('roleadmin',data.data.role);
              sessionStorage.setItem('domain_admin',data.data.domain_admin);
              this.navCtrl.setRoot(IssuesTabsPage);
+              // this.navCtrl.setRoot(IssuesListPage);
           })
           console.log('roleadmin',sessionStorage.getItem('roleadmin'));
           console.log('domain_admin',sessionStorage.getItem('domain_admin'));
@@ -120,7 +121,8 @@ export class WelcomePage {
         }
         else {
           this.submitAttempt = false;
-          this._sharedService.presentToast(data.error);
+          // this._sharedService.presentToast(data.error);
+          this._sharedService.presentToast('Invalid Credentials!!');
           this.loginForm.patchValue({
             mobile: '',
             password: ''

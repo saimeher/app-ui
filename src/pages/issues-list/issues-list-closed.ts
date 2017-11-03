@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage ,ResolutionPage,CaretakerlistPage} from '../pages';
+import { IssueDetailPage ,ResolutionPage,CaretakerlistPage} from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -121,14 +121,14 @@ export class IssuesListClosedPage {
 
   // Issues raised by me 
   getissuesforuser() {
-    console.log('username is', this._sharedService.reg_no);
+    // console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   // dismissOnPageChange: true
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'closed' })
 
       .subscribe(data => {
@@ -156,13 +156,13 @@ export class IssuesListClosedPage {
             
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -185,12 +185,15 @@ export class IssuesListClosedPage {
       this.collapse1 = category1;
     }
   }
+
+
+
   Resolutionprogress() {
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'closed' })
       .subscribe(data => {
         console.log(data);
@@ -216,13 +219,13 @@ export class IssuesListClosedPage {
           this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }

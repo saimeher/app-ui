@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 // import { Sim } from 'ionic-native';
-import { NavController } from 'ionic-angular';
+import { NavController,MenuController} from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
 import { IssueDetailPage, NewIssuePage ,CaretakerlistPage} from '../pages';
@@ -27,10 +27,11 @@ export class IssuesListPage {
   categories1 = [];
   issuesList1 = [];
 
-  constructor(private _apiService: ApiService, private _sharedService: SharedService, public navCtrl: NavController, public loadingCtrl: LoadingController) {
+  constructor(private _apiService: ApiService, private _sharedService: SharedService, public menu: MenuController,public navCtrl: NavController, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
+    this.menu.close();
     console.log('in pending page')
    this.role1 = sessionStorage.getItem('roleadmin');
   //  console.log(this.role1);
@@ -40,6 +41,7 @@ export class IssuesListPage {
     this.collapse1 = '';
     this.getIssuesList();
     this.getissuesforuser();
+    
   }
 
   // get issues list to display as a list

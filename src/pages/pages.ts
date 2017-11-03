@@ -15,4 +15,5 @@ export * from './caretaker-admin/caretaker-admin';
 export * from './caretaker-admin/caretaker-list';
 export * from './resolution-progress/resolution-progress';
 export * from './resolution-progress/resolution';
-  
+export * from './issues-list/pending-list';
+export * from './issues-list/closed-list';

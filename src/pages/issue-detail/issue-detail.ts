@@ -1,9 +1,9 @@
-import { ActionSheetController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController, NavController, NavParams,AlertController} from 'ionic-angular';
 // import { Sim } from 'ionic-native';
 import { Component } from '@angular/core';
 import { AppSettings } from '../app.settings';
 import { SharedService, ApiService } from '../../common/common';
-import { NewIssuePage,CaretakeradminPage } from '../pages';
+import { NewIssuePage } from '../pages';
 
 import { LoadingController} from 'ionic-angular'
 
@@ -20,6 +20,13 @@ export class IssueDetailPage {
   domains;
   status;
   role;
+  assigned_to='';
+  cannottext='';
+  resolution='';
+  notes='';
+  assignedon='';
+  on='';
+
 
   constructor(
     private _apiService: ApiService,
@@ -27,7 +34,8 @@ export class IssueDetailPage {
     private navCtrl: NavController,
     private navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
-    public loadingCtrl:LoadingController
+    public loadingCtrl:LoadingController,
+    private alertCtrl: AlertController
   ) {
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
@@ -48,12 +56,20 @@ export class IssueDetailPage {
     this._apiService.callApi(AppSettings.getIssueApi, 'post', { did: this.did })
       .subscribe(data => {
         if (data.success) {
-          console.log(JSON.stringify(data.data));
+         console.log(data);
           this.issue = data.data[0];
           this.issue.image = this.issue.image;
           this.keys = Object.keys(this.issue);
+          this.assigned_to =  data.data[0].repaired_name;
+          this.cannottext = data.data[0].cannottext;
+          this.notes = data.data[0].notes;
+          this.resolution = data.data[0].date_of_resolution;
+          this.assignedon = data.data[0].assigned_on;
+          this.on=data.data[0].repaired_on;
+          
+           console.log(this.assigned_to);
 
-          if (this.issue.image && this.issue.image.length) {
+            if (this.issue.image && this.issue.image.length) {
             this.issue.image.split(',').forEach(item => {
               this.images.push(AppSettings.imageUrl + item);
             });
@@ -73,7 +89,7 @@ export class IssueDetailPage {
     // this.navCtrl.push(CaretakeradminPage,this.did);
   }
 
-  delete(status) {
+  delete() {
      let load = this.loadingCtrl.create({
       spinner: 'hide',
       content: 'Loading Please Wait...',
@@ -81,12 +97,13 @@ export class IssueDetailPage {
     })
     load.present();
 
-    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile, status: status }).subscribe(data => {
+    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did}).subscribe(data => {
       load.dismiss();
-      if (data.success) {
+      if (data) {
         this._sharedService.presentToast('Issue deleted successfully');
         this.navCtrl.pop();
-      } else {
+      } 
+      else {
         this._sharedService.presentToast('Error: ' + data.error);
       }
 
@@ -97,31 +114,26 @@ export class IssueDetailPage {
 
   }
 
-  presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Delete Issue',
+  presentConfirm() {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'Are you want to delete this issue?',
       buttons: [
         {
-          text: 'Issue got resolved?',
-          role: 'destructive',
-          handler: () => {
-            this.delete('user_resolved');
-          }
-        }, {
-          text: 'No more an issue?',
-          role: 'destructive',          
-          handler: () => {
-            this.delete('user_deleted');
-          }
-        }, {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
           }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.delete();
+          }
         }
       ]
     });
-    actionSheet.present();
+    alert.present();
   }
 }

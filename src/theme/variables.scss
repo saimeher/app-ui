@@ -51,9 +51,17 @@ $colors: (
   primary1:#2c67cc,
 
   purple:#ff9d00,
+  code:#0037ff,
  
 );
-
+my-component {
+  background: #55acee;
+}
+.custom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 // App iOS Variables
 // --------------------------------------------------

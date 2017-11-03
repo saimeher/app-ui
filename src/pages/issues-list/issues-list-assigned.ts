@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,CaretakeradminPage,ResolutionPage,CaretakerlistPage } from '../pages';
+import { IssueDetailPage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -15,6 +15,7 @@ export class IssuesListAssignedPage {
   categories = [];
   issuesList = [];
   display = false;
+  count='';
   collapse: string;
   collapse1: string;
   collapse2: string;
@@ -116,13 +117,6 @@ export class IssuesListAssignedPage {
   // Issues raised by me 
   getissuesforuser() {
     console.log('username is', this._sharedService.reg_no);
-
-    // let load = this.loadingCtrl.create({
-    //   spinner: 'hide',
-    //   content: 'Loading Please Wait...',
-    //   // dismissOnPageChange: true
-    // })
-    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'assigned' })
 
       .subscribe(data => {
@@ -239,6 +233,4 @@ export class IssuesListAssignedPage {
       this.collapse2 = category2;
     }
   }
- 
-  
 }

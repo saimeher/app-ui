@@ -43,10 +43,35 @@
             <ion-col col-4>Mobile</ion-col>
             <ion-col col-8>{{issue?.mobile}}</ion-col>
         </ion-row>
-        <ion-row *ngIf="role === 'stf'">
-            <ion-col col-4>Created on</ion-col>
-            <ion-col col-8>{{issue?.insert_dt}}</ion-col>
+        <ion-row *ngIf=" assigned_to != null">
+            <ion-col col-4>Assigned to </ion-col>
+            <ion-col col-8>{{assigned_to}}</ion-col>
         </ion-row>
+        <ion-row *ngIf=" assignedon != null">
+            <ion-col col-4>Assigned on </ion-col>
+            <ion-col col-8>{{assignedon | date: 'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf=" on != null">
+            <ion-col col-4> Resolution Started On </ion-col>
+            <ion-col col-8>{{on | date: 'medium'}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Created on</ion-col>
+            <ion-col col-8>{{issue?.insert_dt | date: 'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="cannottext!=null">
+            <ion-col col-4>Notes </ion-col>
+            <ion-col col-8>{{cannottext}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="resolution != null">
+            <ion-col col-4>Verified & Resolved On</ion-col>
+            <ion-col col-8>{{resolution | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="notes != null">
+            <ion-col col-4>Notes </ion-col>
+            <ion-col col-8>{{notes}}</ion-col>
+        </ion-row>
+    
 
         <ion-row *ngFor="let image of images">
             <ion-col col-12>
@@ -64,9 +89,9 @@
             <ion-col col-2>
             </ion-col>
             <ion-col col-4 *ngIf="issue">
-                <button *ngIf="issue.status == 'user_deleted' ||  issue.status == 'user_resolved' || issue.status == 'verified_resolved'"
+                <button *ngIf="issue.status == 'user_deleted' ||  issue.status == 'user_resolved' || issue.status == 'verified_resolved' || issue.status == 'cannot_be_resolved'"
                     ion-button clear color="light"> </button>
-                <button *ngIf="issue.status == 'pending' ||  issue.status == 'assigned' || issue.status == 'onhold'  ||  issue.status == 'resolution_in_progress'"
+                <button *ngIf="issue.status == 'pending'"
                     ion-button clear color="light" (click)="edit()">
                  <ion-chip #chip1>
                 <ion-icon name="logo-buffer" color="primary"></ion-icon>
@@ -74,8 +99,8 @@
                  </ion-chip>
                 </button>
             </ion-col>
-            <ion-col col-4 *ngIf="issue && issue.status != 'user_deleted' &&  issue.status != 'user_resolved'  &&  issue.status != 'verified_resolved' && issue.status != 'onhold'  ">
-                <button *ngIf="issue && issue.reg_no == _sharedService.reg_no" ion-button clear color="light" (click)="presentActionSheet()">              
+            <ion-col col-4 *ngIf="issue && issue.status != 'user_deleted' &&  issue.status != 'verified_resolved' && issue.status != 'cannot_be_resolved'">
+                <button *ngIf="issue && issue.reg_no == _sharedService.reg_no" ion-button clear color="light" (click)="presentConfirm()">              
           <ion-chip #chip2>
               <ion-icon name="trash" color="danger"></ion-icon>
               <ion-label>Delete</ion-label>

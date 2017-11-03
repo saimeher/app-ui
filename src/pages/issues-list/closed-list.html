@@ -1,0 +1,21 @@
+<!-- <ion-header>
+</ion-header> -->
+
+<ion-header>
+    <!-- <ion-navbar color="primary">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Issues List</ion-title>
+    </ion-navbar> -->
+</ion-header>
+
+
+<ion-content>
+    <ion-tabs>
+        <ion-tab [root]="user_deleted" tabTitle="User Deleted" tabIcon="list-box"></ion-tab>
+        <ion-tab [root]="cannot_be_resolved" tabTitle="Cannot be resolved" tabIcon="list-box"></ion-tab>
+        <ion-tab [root]="closedissue" tabTitle="Closed" tabIcon="list-box"></ion-tab>
+        <ion-tab [root]="verified_resolved" tabTitle = "Verified & resolved" tabIcon="list-box"></ion-tab>
+    </ion-tabs>
+</ion-content>

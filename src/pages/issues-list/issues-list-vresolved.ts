@@ -122,14 +122,14 @@ export class IssuesListVerifiedPage {
   // Issues raised by others 
   getissuesforuser()
    {
-    console.log('username is', this._sharedService.reg_no);
+    // console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   // dismissOnPageChange: true
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'verified_resolved' })
 
       .subscribe(data => {
@@ -155,13 +155,13 @@ export class IssuesListVerifiedPage {
             this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -186,11 +186,11 @@ export class IssuesListVerifiedPage {
   }
  // Issues to solve 
   Resolutionprogress() {
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'verified_resolved' })
       .subscribe(data => {
         console.log(data);
@@ -216,13 +216,13 @@ export class IssuesListVerifiedPage {
              this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }

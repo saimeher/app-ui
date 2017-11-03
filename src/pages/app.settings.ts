@@ -20,8 +20,10 @@ export class AppSettings {
   // public static issuesListApi = 'http://localhost/issueregister-server/api/issues_list';
   Url: string = 'http://192.168.0.109/issue_register/api/';
 
-  public static uploadUrl = 'http://localhost/issueregister-server/upload/upload';
-  public static imageUrl = 'http://localhost/issueregister-server/uploads/';
+  // public static uploadUrl = 'http://localhost/issueregister-server/upload/upload';
+  public static uploadUrl = 'http://localhost/issue_register/api/insert_docs';
+  // public static imageUrl = 'http://localhost/issueregister-server/uploads/';
+  public static imageUrl = 'http://localhost/issue_register/uploads';
   // public static newIssueApi = 'http://localhost/issueregister-server/api/insert_data';
   // public static issuesListApi = 'http://localhost/issueregister-server/api/issues_list';
   // public static getIssueApi = 'http://localhost/issueregister-server/api/get_issue';
@@ -39,7 +41,7 @@ export class AppSettings {
   public static issuesListApi = 'http://192.168.0.109/issue_register/api/issues_list';
   public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissuesforuser';
   // public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissue';
-  public static deleteApi = 'http://192.168.0.109/issue_register/api/delete_issue';
+  public static deleteApi = 'http://192.168.0.109/issue_register/api/DELETEISSUE';
   public static Toresolutionprogress ='http://192.168.0.109/issue_register/api/Toresolutionprogress';
 
   public static  getStaffData: string = 'http://210.16.79.137/raghuerp/server/api/getStaffData';
@@ -47,6 +49,9 @@ export class AppSettings {
   public static modifyIssue ='http://192.168.0.109/issue_register/api/modifyIssue';
   public static UPDATEISSUE = 'http://192.168.0.109/issue_register/api/UPDATEISSUE';
   public static  resolutioninprogress = 'http://192.168.0.109/issue_register/api/RESOLUTIONINPROGRESS';
+
+  public static getdetails = 'http://192.168.0.109/issue_register/api/GETDETAILS';
+  public static getImagesbyId = 'http://192.168.0.109/issue_register/api/getImagesbyId';
   
 
 

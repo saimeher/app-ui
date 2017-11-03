@@ -14,7 +14,7 @@
     </ion-item>
   </ion-list>-->
 
-    <ion-grid *ngIf="issue">
+    <!-- <ion-grid *ngIf="issue">
         <ion-row>
             <ion-col col-4>Category</ion-col>
             <ion-col col-8>{{_sharedService.categorySearch(issue.domain, domains)?.title}}</ion-col>
@@ -48,6 +48,71 @@
             <ion-col col-8>{{issue?.insert_dt}}</ion-col>
         </ion-row>
 
+        <ion-row *ngFor="let image of images">
+            <ion-col col-12>
+                <img src="{{image}}" />
+            </ion-col>
+        </ion-row>
+
+    </ion-grid> -->
+    <ion-grid *ngIf="issue">
+        <ion-row>
+            <ion-col col-4>Category</ion-col>
+            <ion-col col-8>{{_sharedService.categorySearch(issue.domain, domains)?.title}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Description</ion-col>
+            <ion-col col-8>{{issue?.issue_desc}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Location</ion-col>
+            <ion-col col-8>{{issue?.location}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Problem</ion-col>
+            <ion-col col-8>{{issue?.problem}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Status</ion-col>
+            <ion-col col-8>{{_sharedService.categorySearch(issue.status, status)?.title}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="role === 'stf' ">
+            <ion-col col-4>Raised By</ion-col>
+            <ion-col col-8>{{issue?.raised_by}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="role === 'stf'">
+            <ion-col col-4>Mobile</ion-col>
+            <ion-col col-8>{{issue?.mobile}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-4>Created on</ion-col>
+            <ion-col col-8>{{issue?.insert_dt | date: 'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf=" assigned_to != null">
+            <ion-col col-4>Assigned to </ion-col>
+            <ion-col col-8>{{assigned_to}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf=" assignedon != null">
+            <ion-col col-4>Assigned on </ion-col>
+            <ion-col col-8>{{assignedon | date: 'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf=" on != null">
+            <ion-col col-4> Resolution Started On </ion-col>
+            <ion-col col-8>{{on | date: 'medium'}}</ion-col>
+        </ion-row>
+        
+        <ion-row *ngIf="cannottext!=null">
+            <ion-col col-4>Notes </ion-col>
+            <ion-col col-8>{{cannottext}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="resolution != null">
+            <ion-col col-4>Verified & Resolved On</ion-col>
+            <ion-col col-8>{{resolution | date:'medium'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="notes != null">
+            <ion-col col-4>Notes </ion-col>
+            <ion-col col-8>{{notes}}</ion-col>
+        </ion-row>
         <ion-row *ngFor="let image of images">
             <ion-col col-12>
                 <img src="{{image}}" />

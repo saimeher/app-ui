@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,ResolutionPage,CaretakerlistPage } from '../pages';
+import { IssueDetailPage,ResolutionPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -121,12 +121,12 @@ export class IssuesListCannotbePage {
    {
     console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'cannot_be_resolved' })
 
       .subscribe(data => {
@@ -153,13 +153,13 @@ export class IssuesListCannotbePage {
             this.issuesListlength1= this.issuesList1[categoryTitle1].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
@@ -185,12 +185,12 @@ export class IssuesListCannotbePage {
   }
 
   Resolutionprogress() {
-    console.log('username is', this._sharedService.reg_no);
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-    })
-    load.present();
+    // console.log('username is', this._sharedService.reg_no);
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.Toresolutionprogress, 'post', { reg_no: this._sharedService.reg_no, type: 'cannot_be_resolved' })
       .subscribe(data => {
         console.log(data);
@@ -216,13 +216,13 @@ export class IssuesListCannotbePage {
              this.issuesListlength2= this.issuesList2[categoryTitle2].length;
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }

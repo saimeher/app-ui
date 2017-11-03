@@ -34,7 +34,7 @@
                 <ion-input [class.invalid]="!issueForm.controls.problem.valid && submitAttempt" formControlName="problem" type="text"></ion-input>
             </ion-item>
 
-<!-- 
+            <!-- 
             <ion-item *ngIf="did > 0 && role === 'stf' && (domain_admin && domain_admin.indexOf(issueForm.controls.domain.value + ',') != -1)">
                 <ion-label stacked>Priority</ion-label>
                 <ion-select formControlName="priority">
@@ -82,11 +82,12 @@
             </ion-item>
 
             <ion-list *ngIf="did > 0 && editImages.length">
-                <ion-item *ngFor="let image of editImages">
+                <!-- <ion-item *ngFor="let image of editImages"> -->
+                      <ion-item *ngFor="let image of img_data">
                     <button ion-button icon-only (click)="removeImage(image, 'edit')">
                         <ion-icon name="close"></ion-icon>
                     </button>
-                    <img src="{{image}}" style="width: 100%">
+                    <img src="{{img_url}}/{{img.img_name}}" style="width: 100%">
                 </ion-item>
             </ion-list>
 

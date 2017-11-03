@@ -11,9 +11,9 @@
   
   <ion-content>
   
-      <ion-toolbar   color="orange">
-          <ion-badge item-right>{{issueCount}}</ion-badge>
-          <ion-title>Issues raised by me </ion-title>
+      <ion-toolbar  color="orange">
+          <ion-badge style="float:right; margin-right:4px">{{issueCount}}</ion-badge>
+          <ion-title>Raised by me </ion-title>
       </ion-toolbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -33,17 +33,17 @@
     </ion-item-group>
     
    
-  <ion-toolbar  *ngIf="role == 'stf'" color="orange">
-      <ion-badge item-right>{{issueCount1}}</ion-badge>
-    <ion-title>View/Update Issues </ion-title>
+  <ion-toolbar  *ngIf="issuesListlength2 > 0 && role == 'stf' " color="orange">
+      <ion-badge style="float:right; margin-right:4px">{{issueCount1}}</ion-badge>
+    <ion-title>Pending for Action </ion-title>
   </ion-toolbar>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list *ngIf="issuesListlength2  == 0 && role == 'stf' ">
+  <!-- <ion-list *ngIf="issuesListlength2  == 0 && role == 'stf' ">
       <p style="font-size:18px;margin-left:18px">no data</p>
-    </ion-list>  
+    </ion-list>   -->
 
 
   <ion-item-group *ngFor="let category1 of categories1; let i=index">

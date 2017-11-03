@@ -3,14 +3,13 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>fd</ion-title>
+        <ion-title>{{issue}}</ion-title>
         
     </ion-navbar>
 </ion-header>
 <ion-content padding>
     <form [formGroup]="resolutioninform">
         <ion-list>
-
             <ion-item *ngIf="type == 'onhold'">
                 <ion-label stacked>Status</ion-label>
                 <ion-select formControlName="status" (ionChange)="selStataus($event)">

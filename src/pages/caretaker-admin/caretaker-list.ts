@@ -1,10 +1,10 @@
 
-import { ActionSheetController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController, NavController, NavParams,AlertController} from 'ionic-angular';
 // import { Sim } from 'ionic-native';
 import { Component } from '@angular/core';
 import { AppSettings } from '../app.settings';
 import { SharedService, ApiService } from '../../common/common';
-import { NewIssuePage,CaretakeradminPage } from '../pages';
+import { CaretakeradminPage } from '../pages';
 
 import { LoadingController} from 'ionic-angular'
 
@@ -22,13 +22,20 @@ export class CaretakerlistPage {
   status;
   role;
   type;
+  assigned_to='';
+  cannottext='';
+  resolution='';
+  notes='';
+  assignedon='';
+  on='';
   constructor(
     private _apiService: ApiService,
     private _sharedService: SharedService,
     private navCtrl: NavController,
     private navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
-    public loadingCtrl:LoadingController
+    public loadingCtrl:LoadingController,
+    private alertCtrl: AlertController
   ) {
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
@@ -54,6 +61,12 @@ export class CaretakerlistPage {
           this.issue = data.data[0];
           this.issue.image = this.issue.image;
           this.keys = Object.keys(this.issue);
+          this.assigned_to =  data.data[0].repaired_name;
+          this.cannottext = data.data[0].cannottext;
+          this.notes = data.data[0].notes;
+          this.resolution = data.data[0].date_of_resolution;
+          this.assignedon = data.data[0].assigned_on;
+          this.on=data.data[0].repaired_on;
 
           if (this.issue.image && this.issue.image.length) {
             this.issue.image.split(',').forEach(item => {
@@ -73,7 +86,7 @@ export class CaretakerlistPage {
      this.navCtrl.push(CaretakeradminPage,{did:this.did,type:this.type});
   }
 
-  delete(status) {
+  delete() {
      let load = this.loadingCtrl.create({
       spinner: 'hide',
       content: 'Loading Please Wait...',
@@ -81,9 +94,9 @@ export class CaretakerlistPage {
     })
     load.present();
 
-    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did, mobile: this._sharedService.mobile, status: status }).subscribe(data => {
+    this._apiService.callApi(AppSettings.deleteApi, 'post', { did: this.did }).subscribe(data => {
       load.dismiss();
-      if (data.success) {
+      if (data) {
         this._sharedService.presentToast('Issue deleted successfully');
         this.navCtrl.pop();
       } else {
@@ -97,31 +110,56 @@ export class CaretakerlistPage {
 
   }
 
-  presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Delete Issue',
-      buttons: [
-        {
-          text: 'Issue got resolved?',
-          role: 'destructive',
-          handler: () => {
-            this.delete('user_resolved');
+  // presentActionSheet() {
+  //   let actionSheet = this.actionSheetCtrl.create({
+  //     title: 'Delete Issue',
+  //     buttons: [
+  //       {
+  //         text: 'Issue got resolved?',
+  //         role: 'destructive',
+  //         handler: () => {
+  //           this.delete('user_resolved');
+  //         }
+  //       }, {
+  //         text: 'No more an issue?',
+  //         role: 'destructive',          
+  //         handler: () => {
+  //           this.delete('user_deleted');
+  //         }
+  //       }, {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           console.log('Cancel clicked');
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   actionSheet.present();
+  // }
+
+
+  
+    presentConfirm() {
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Delete',
+        message: 'Are you want to delete this issue?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.delete();
+            }
           }
-        }, {
-          text: 'No more an issue?',
-          role: 'destructive',          
-          handler: () => {
-            this.delete('user_deleted');
-          }
-        }, {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    });
-    actionSheet.present();
+        ]
+      });
+      alert.present();
+    }
   }
-}

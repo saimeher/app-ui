@@ -6,8 +6,7 @@ import { AlertController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, Issue, DeviceService, SharedService, DateToIso } from '../../common/common';
-import { IssuesListPage } from '../pages';
-
+import {IssuesTabsPage } from '../pages';
 
 declare var cordova: any;
 
@@ -41,6 +40,9 @@ export class NewIssuePage {
   showdays = '';
   searchQuery: string = '';
   items = [];
+  id='';
+  img_data='';
+  img_url = "http://localhost/issue_register/uploads";
 
 
   submitAttempt: boolean = false;
@@ -99,7 +101,7 @@ export class NewIssuePage {
     })
   }
   domainSelected(domain) {
-    let info = '';
+    // let info = '';
     this._sharedService.presentToast(domain.info, 'bottom');
   }
   ionViewDidEnter() {
@@ -143,6 +145,7 @@ export class NewIssuePage {
 
             });
             console.log(this.did, 'test');
+            this.getImagesbyId();
 
             this.tempPatch = {
               priority: temp.priority,
@@ -264,7 +267,8 @@ export class NewIssuePage {
               this._sharedService.presentToast('Issue updated successfully');
             }
             load.dismiss();
-            this.navCtrl.setRoot(IssuesListPage);
+            // this.navCtrl.setRoot(IssuesTabsPage);
+            this.navCtrl.popToRoot();
           },
           error => {
             load.dismiss();
@@ -276,11 +280,12 @@ export class NewIssuePage {
       console.log('hui');
       this._apiService.callApi(AppSettings.INSERTISSUE, 'post', this.issueForm.value)
         .subscribe(data => {
+          this.id = data;
           if (data) {
             this._sharedService.presentToast('Issue registered successfully');
           }
           load.dismiss();
-          this.navCtrl.setRoot(IssuesListPage);
+          this.navCtrl.setRoot(IssuesTabsPage);
         },
         error => {
           load.dismiss();
@@ -572,5 +577,12 @@ export class NewIssuePage {
   }
   selectItems(event) {
     console.log(event);
+  }
+
+  getImagesbyId() {
+    this._apiService.callApi(AppSettings.getImagesbyId, 'post',{img_id:this.did,reg_no:this._sharedService.reg_no}).subscribe(data => {
+      console.log(data);
+      this.img_data = data;
+    })
   }
 }

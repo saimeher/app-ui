@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, SharedService } from '../../common/common';
-import { IssueDetailPage, NewIssuePage,CaretakerlistPage } from '../pages';
+import { IssueDetailPage,CaretakerlistPage } from '../pages';
 import { LoadingController } from 'ionic-angular';
 
 @Component({
@@ -110,14 +110,14 @@ export class IssuesListUsdeletedPage {
   // Issues raised by others 
   getissuesforuser()
    {
-    console.log('username is', this._sharedService.reg_no);
+    // console.log('username is', this._sharedService.reg_no);
 
-    let load = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Loading Please Wait...',
-      // dismissOnPageChange: true
-    })
-    load.present();
+    // let load = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: 'Loading Please Wait...',
+    //   // dismissOnPageChange: true
+    // })
+    // load.present();
     this._apiService.callApi(AppSettings.issuesListApi, 'post', { reg_no: this._sharedService.reg_no, role: this._sharedService.role, type: 'user_deleted' })
 
       .subscribe(data => {
@@ -145,13 +145,13 @@ export class IssuesListUsdeletedPage {
         
           });
         }
-        load.dismiss();
+        // load.dismiss();
 
         if (this.refresher) {
           this.refresher.complete();
         }
       }, error => {
-        load.dismiss();
+        // load.dismiss();
         if (this.refresher) {
           this.refresher.complete();
         }
