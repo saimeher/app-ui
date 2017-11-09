@@ -27,6 +27,11 @@ export class ResolutionPage {
   notes='';
   assignedon='';
   on='';
+  img_data='';
+  reg_no='';
+  data1;
+  img_url = "http://192.168.0.109/issue_register/uploads";
+  // img_url="http://210.16.79.137/raghuerp/issueregister/server/uploads";
   constructor(
     private _apiService: ApiService,
     private _sharedService: SharedService,
@@ -65,6 +70,13 @@ export class ResolutionPage {
           this.resolution = data.data[0].date_of_resolution;
           this.assignedon = data.data[0].assigned_on;
           this.on=data.data[0].repaired_on;
+          this.reg_no=data.data[0].reg_no;
+
+          this._apiService.callApi(AppSettings.getImagesbyId, 'post', { img_id: this.did, reg_no: this.reg_no }).subscribe(data1 => {
+            console.log(data1);
+            this.img_data = data1;
+          })
+
 
           if (this.issue.image && this.issue.image.length) {
             this.issue.image.split(',').forEach(item => {

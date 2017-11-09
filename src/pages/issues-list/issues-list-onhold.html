@@ -14,7 +14,7 @@
 
     <ion-toolbar color="orange">
 
-        <ion-badge style="float:right; margin-right:4px">{{issueCount}}</ion-badge>
+        <ion-badge style="float:right; margin-right:4px; font-size: 16px;">{{issueCount}}</ion-badge>
         <ion-title>Raised by me </ion-title>
     </ion-toolbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
@@ -36,7 +36,7 @@
     </ion-item-group>
 
     <ion-toolbar *ngIf="issuesListlength1 > 0 && role == 'stf'" color="orange">
-        <ion-badge style="float:right; margin-right:4px">{{issueCount1}}</ion-badge>
+        <ion-badge style="float:right; margin-right:4px; font-size: 16px;">{{issueCount1}}</ion-badge>
         <ion-title>Pending for action</ion-title>
     </ion-toolbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
@@ -57,7 +57,7 @@
 
 
     <ion-toolbar *ngIf="issuesListlength2 > 0 " color="orange">
-        <ion-badge style="float:right; margin-right:4px">{{issueCount3}}</ion-badge>
+        <ion-badge style="float:right; margin-right:4px; font-size: 16px;">{{issueCount3}}</ion-badge>
         <ion-title>Assigned to me </ion-title>
     </ion-toolbar>
 

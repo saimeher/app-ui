@@ -6,7 +6,10 @@ import { AlertController } from 'ionic-angular';
 
 import { AppSettings } from '../app.settings';
 import { ApiService, Issue, DeviceService, SharedService, DateToIso } from '../../common/common';
-import {IssuesTabsPage } from '../pages';
+import { UploadService } from '../../common/uploadservice';
+import { IssuesTabsPage } from '../pages';
+// import { IssuesTabsPage } from '../pages';
+// import {IssuesTabsPage } from '../pages';
 
 declare var cordova: any;
 
@@ -40,9 +43,12 @@ export class NewIssuePage {
   showdays = '';
   searchQuery: string = '';
   items = [];
-  id='';
-  img_data='';
-  img_url = "http://localhost/issue_register/uploads";
+  id = '';
+  img_data = '';
+  img_url = "http://192.168.0.109/issue_register/uploads";
+  // img_url="http://210.16.79.137/raghuerp/issueregister/server/uploads";
+  data2;
+
 
 
   submitAttempt: boolean = false;
@@ -77,7 +83,8 @@ export class NewIssuePage {
     public alertCtrl: AlertController,
     private _apiService: ApiService,
     private _deviceService: DeviceService,
-    private _sharedService: SharedService) {
+    private _sharedService: SharedService,
+    private upservice: UploadService) {
 
     this.issueForm = formBuilder.group({
       did: [''],
@@ -106,12 +113,10 @@ export class NewIssuePage {
   }
   ionViewDidEnter() {
     this.initializeItems();
+   this.getImagesbyId();
 
     this.role = sessionStorage.getItem('roleadmin');
-    console.log(this.role);
     this.domain_admin = sessionStorage.getItem('domain_admin');
-    console.log(this.domain_admin);
-
     this.domains = AppSettings.domains;
     this.status = AppSettings.status;
     const _dateToIso = new DateToIso();
@@ -144,9 +149,7 @@ export class NewIssuePage {
               deletedImages: '',
 
             });
-            console.log(this.did, 'test');
             this.getImagesbyId();
-
             this.tempPatch = {
               priority: temp.priority,
               raised_by: temp.raised_by,
@@ -156,92 +159,96 @@ export class NewIssuePage {
               notes: temp.notes,
               status: temp.status
             };
-            // console.log(this.tempPatch);
-            // console.log("temp domain", temp.domain, this.domain_admin, (this.domain_admin && this.domain_admin.indexOf(temp.domain + ',') != -1));
-            if (this._sharedService.roleadmin === 'stf' && (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
-            }
+            // if (this._sharedService.roleadmin === 'stf' && (this._sharedService.domain_admin && this._sharedService.domain_admin.indexOf(temp.domain + ',') != -1)) {
+            // }
             // display images
-            if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length) {
-              this.issueForm.controls['image'].value.split(',').forEach(item => {
-                this.editImages.push(AppSettings.imageUrl + item);
-              });
-            }
-            console.log(JSON.stringify(this.issue));
+            // if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length) {
+            //   this.issueForm.controls['image'].value.split(',').forEach(item => {
+            //     this.editImages.push(AppSettings.imageUrl + item);
+            //   });
+            // }
+            // console.log(JSON.stringify(this.issue));
           } else {
             this._sharedService.presentToast('Error retrieving data to edit');
           }
           //   // for admin, disable fields that are submitted by user
-          if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
-            this.issueForm.controls['issue_desc'].disable();
-            this.issueForm.controls['problem'].disable();
-            this.issueForm.controls['location'].disable();
-          }
+          // if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
+          //   this.issueForm.controls['issue_desc'].disable();
+          //   this.issueForm.controls['problem'].disable();
+          //   this.issueForm.controls['location'].disable();
+          // }
 
-        }, error => {
+        }, 
+        error => {
           load.dismiss();
-          this._sharedService.presentToast('Server error: ' + error);
-        });
+          // this._sharedService.presentToast('Server error: ' + error);
+        }
+      );
       }
     }
   }
-  public save() {
-    // console.log("bcxjh",this._sharedService.mobile);
-    console.log("in save");
-    this.submitAttempt = true;
-    // if admin, enable user fields for form submission
-    if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
-      //this.issueForm.controls['domain'].enable();
-      this.issueForm.controls['issue_desc'].enable();
-      this.issueForm.controls['problem'].enable();
-      this.issueForm.controls['location'].enable();
-    }
+  // public save() {
+  //   // console.log("bcxjh",this._sharedService.mobile);
+  //   console.log("in save");
+  //   this.submitAttempt = true;
+  //   // if admin, enable user fields for form submission
+  //   if (this.issueForm.controls['reg_no'].value != this._sharedService.reg_no) {
+  //     //this.issueForm.controls['domain'].enable();
+  //     this.issueForm.controls['issue_desc'].enable();
+  //     this.issueForm.controls['problem'].enable();
+  //     this.issueForm.controls['location'].enable();
+  //   }
 
-    if (this.issueForm.valid) {
+  //   if (this.issueForm.valid) {
 
-      if (this.issueForm.controls['did'].value > 0 && this.role === 'stf' && (this.domain_admin && this.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
-        // console.log("temp patch is", this.tempPatch)
-        this.issueForm.patchValue(this.tempPatch);
-      }
+  //     if (this.issueForm.controls['did'].value > 0 && this.role === 'stf' && (this.domain_admin && this.domain_admin.indexOf(this.issueForm.controls['domain'].value + ',') == -1)) {
+  //       // console.log("temp patch is", this.tempPatch)
+  //       this.issueForm.patchValue(this.tempPatch);
+  //     }
 
-      // remove deleted images from issue.image
-      if (this.issueForm.controls['deletedImages'].value && this.issueForm.controls['deletedImages'].value.length > 0 && this.issueForm.controls['did'].value > 0) {
-        this.issueForm.controls['deletedImages'].value.split(',').forEach(item => {
-          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(item, '');
-          this.issueForm.patchValue({
-            'image': this.issueForm.controls['image'].value.replace(item, '')
-          });
-        });
-      }
+  //     // remove deleted images from issue.image
+  //     if (this.issueForm.controls['deletedImages'].value && this.issueForm.controls['deletedImages'].value.length > 0 && this.issueForm.controls['did'].value > 0) {
+  //       this.issueForm.controls['deletedImages'].value.split(',').forEach(item => {
+  //         // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(item, '');
+  //         this.issueForm.patchValue({
+  //           'image': this.issueForm.controls['image'].value.replace(item, '')
+  //         });
+  //       });
+  //     }
 
-      // remove extra commas
-      if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length > 0) {
-        // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim();
-        this.issueForm.patchValue({
-          'image': this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim()
-        });
+  //     // remove extra commas
+  //     if (this.issueForm.controls['image'].value && this.issueForm.controls['image'].value.length > 0) {
+  //       // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim();
+  //       this.issueForm.patchValue({
+  //         'image': this.issueForm.controls['image'].value.replace(/[, ]+/g, ',').trim()
+  //       });
 
-        if (this.issueForm.controls['image'].value.substr(0, 1) == ',') {
-          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(1);
-          this.issueForm.patchValue({
-            'image': this.issueForm.controls['image'].value.substr(1)
-          });
-        }
+  //       if (this.issueForm.controls['image'].value.substr(0, 1) == ',') {
+  //         // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(1);
+  //         this.issueForm.patchValue({
+  //           'image': this.issueForm.controls['image'].value.substr(1)
+  //         });
+  //       }
 
-        if (this.issueForm.controls['image'].value.substr(this.issueForm.controls['image'].value.length - 1, 1) == ',') {
-          // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1);
-          this.issueForm.patchValue({
-            'image': this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1)
-          });
-        }
-      }
+  //       if (this.issueForm.controls['image'].value.substr(this.issueForm.controls['image'].value.length - 1, 1) == ',') {
+  //         // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1);
+  //         this.issueForm.patchValue({
+  //           'image': this.issueForm.controls['image'].value.substr(0, this.issueForm.controls['image'].value.length - 1)
+  //         });
+  //       }
+  //     }
 
 
-      this.uploadImage();
-    }
+  //     // this.uploadImage();
+  //     let p = Object.assign({}, this.issue, this.issueForm.value, this.role1);
+  //     const body = { issue: p };
+  //     console.log('body', body);
+  //     // this.insertData(body);
+  //   }
 
-  }
+  // }
 
-  insertData(body) {
+  insertData() {
 
     let load = this.loadingCtrl.create({
       spinner: 'hide',
@@ -250,48 +257,57 @@ export class NewIssuePage {
     })
 
     load.present();
-    console.log(this.did);
     if (this.did > 0) {
-      
-      console.log(this.issueForm.value.status);
-      
-        let value = {};
-        value['domain'] = this.issueForm.value.domain;
-        value['issue_desc'] = this.issueForm.value.issue_desc;
-        value['location'] = this.issueForm.value.location;
-        value['problem'] = this.issueForm.value.problem;
-        value['did'] = this.issueForm.controls['did'].value;
-        this._apiService.callApi(AppSettings.modifyIssue, 'post', value)
-          .subscribe(data => {
-            if (this.did) {
-              this._sharedService.presentToast('Issue updated successfully');
-            }
-            load.dismiss();
-            // this.navCtrl.setRoot(IssuesTabsPage);
-            this.navCtrl.popToRoot();
-          },
-          error => {
-            load.dismiss();
-            this._sharedService.presentToast('Server error: ' + error);
-          });
+
+      console.log(this.issueForm, '123');
+      let value = {};
+      value['domain'] = this.issueForm.value.domain;
+      value['issue_desc'] = this.issueForm.value.issue_desc;
+      value['location'] = this.issueForm.value.location;
+      value['problem'] = this.issueForm.value.problem;
+      value['did'] = this.issueForm.controls['did'].value;
+      this._apiService.callApi(AppSettings.modifyIssue, 'post', value)
+        .subscribe(data => {
+          if (this.did) {
+            this._sharedService.presentToast('Issue updated successfully');
+            this.id = this.issueForm.controls['did'].value;
+            console.log(this.id);
+           this.uploadImage(this.id);
+          }
+          // load.dismiss();
+          // this.navCtrl.setRoot(IssuesTabsPage);
+          this.navCtrl.popToRoot();
+        },
+        // error => {
+        //   load.dismiss();
+        //   this._sharedService.presentToast('Server error: ' + error);
+        // }
+      );
     }
 
     else {
-      console.log('hui');
       this._apiService.callApi(AppSettings.INSERTISSUE, 'post', this.issueForm.value)
         .subscribe(data => {
           this.id = data;
           if (data) {
             this._sharedService.presentToast('Issue registered successfully');
           }
-          load.dismiss();
+          // load.dismiss();
+          console.log('here');
+          // 
           this.navCtrl.setRoot(IssuesTabsPage);
+          console.log(this.id);
+          this.uploadImage(this.id);
+
+
         },
-        error => {
-          load.dismiss();
-          this._sharedService.presentToast('Server error: ' + error);
-        });
+        // error => {
+        //   load.dismiss();
+        //   this._sharedService.presentToast('Server error: ' + error);
+        // }
+      );
     }
+    load.dismiss();
     // this._apiService.callApi(AppSettings.newIssueApi, 'post', body)
     //   .subscribe(data => {
     //     if (data.success) {
@@ -329,45 +345,62 @@ export class NewIssuePage {
       case 'new': temp = this.images; break;
       case 'edit': temp = this.editImages; break;
     }
-
-    let i = temp.indexOf(image);
-    if (i != -1) {
-
-      if (this.issueForm.controls['did'].value > 0) {
-        if (this.issueForm.controls['deletedImages'].value.length == 0) {
-          // this.issueForm.controls['deletedImages'].value = temp.splice(i, 1).toString();
-
-          this.issueForm.patchValue({
-            'deletedImages': temp.splice(i, 1).toString()
-          });
-
-        } else {
-          // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages + ',' + temp.splice(i, 1).toString();
-
-          this.issueForm.patchValue({
-            'deletedImages': this.issueForm.controls['deletedImages'].value + ',' + temp.splice(i, 1).toString()
-          });
-        }
-
-        // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages.replace(AppSettings.imageUrl, '');
-        this.issueForm.patchValue({
-          'deletedImages': this.issueForm.controls['deletedImages'].value.replace(AppSettings.imageUrl, '')
-        });
-
-      } else {
-        temp.splice(i, 1);
+     
+    if(type === 'edit')
+    {
+    this._apiService.callApi(AppSettings.deleteimage,'post',image).subscribe(data2=>
+    {
+      this.data2 = data2;
+      if(data2)
+      {
+        this.navCtrl.popToRoot();
+        console.log('image deleted');
+        this.presentToast('Image Deleted Successfully !!');
       }
-
-      // remove server name from image
+      else{
+        this.presentToast('Error While Deleting Image !!');
+      }
+    })
     }
+      
+    // let i = temp.indexOf(image);
+    // if (i != -1) {
 
-    if (type === 'new') {
-      // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(image, '');
+    //   if (this.issueForm.controls['did'].value > 0) {
+    //     if (this.issueForm.controls['deletedImages'].value.length == 0) {
+    //       // this.issueForm.controls['deletedImages'].value = temp.splice(i, 1).toString();
 
-      this.issueForm.patchValue({
-        'image': this.issueForm.controls['image'].value.replace(image, '')
-      });
-    }
+    //       this.issueForm.patchValue({
+    //         'deletedImages': temp.splice(i, 1).toString()
+    //       });
+
+    //     } else {
+    //       // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages + ',' + temp.splice(i, 1).toString();
+
+    //       this.issueForm.patchValue({
+    //         'deletedImages': this.issueForm.controls['deletedImages'].value + ',' + temp.splice(i, 1).toString()
+    //       });
+    //     }
+
+    //     // this.issueForm['issue'].deletedImages = this.issueForm['issue'].deletedImages.replace(AppSettings.imageUrl, '');
+    //     this.issueForm.patchValue({
+    //       'deletedImages': this.issueForm.controls['deletedImages'].value.replace(AppSettings.imageUrl, '')
+    //     });
+
+    //   } else {
+    //     temp.splice(i, 1);
+    //   }
+
+    //   // remove server name from image
+    // }
+
+    // if (type === 'new') {
+    //   // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value.replace(image, '');
+
+    //   this.issueForm.patchValue({
+    //     'image': this.issueForm.controls['image'].value.replace(image, '')
+    //   });
+    // }
 
   }
 
@@ -458,15 +491,15 @@ export class NewIssuePage {
       this.issueForm.patchValue({
         image: newFileName
       });
-
-    } else {
+      console.log(this.issueForm.value.image);
+    }
+    else {
       // this.issueForm.controls['image'].value= this.issueForm.controls['image'].value+ ',' + newFileName;
       this.issueForm.patchValue({
         image: this.issueForm.controls['image'].value + ',' + newFileName
       });
+      console.log(this.issueForm.value.image);
     }
-
-
     return newFileName;
   }
 
@@ -498,45 +531,70 @@ export class NewIssuePage {
     }
   }
 
-  public uploadImage() {
+  public uploadImage(id) {
     // Destination URL
+    console.log(id);
+    console.log(this._sharedService.reg_no);
+    // var url = 'http://192.168.0.109/issue_register/api/insert1_docs';
+    // 
     var url = AppSettings.uploadUrl;
 
+    // let count = 0
+    // let max = this.images.length;
     this.images.forEach(item => {
+      // console.log('item', item);
+      // console.log('picture', this.images);
+
       // File for Upload
-      var targetPath = this.pathForImage(item);
+      // if(item)
+      // {
+        var targetPath = this.pathForImage(item);
+        console.log('image', targetPath)
+        // File name only
+        var filename = item;
+  
+        var options = {
+          fileKey: "file",
+          fileName: filename,
+          chunkedMode: false,
+          mimeType: "multipart/form-data",
+          params: { 'fileName': filename, 'id': id, 'reg_no': this._sharedService.reg_no }
+        };
 
-      // File name only
-      var filename = item;
 
-      var options = {
-        fileKey: "file",
-        fileName: filename,
-        chunkedMode: false,
-        mimeType: "multipart/form-data",
-        params: { 'fileName': filename }
-      };
+  
+        const fileTransfer = new Transfer();
+  
+        // this.loading = this.loadingCtrl.create({
+        //   content: 'Uploading...',
+        // });
+        // this.loading.present();
 
-      const fileTransfer = new Transfer();
-
-      this.loading = this.loadingCtrl.create({
-        content: 'Uploading...',
-      });
-      this.loading.present();
-
-      // Use the FileTransfer to upload the image
-      fileTransfer.upload(targetPath, url, options).then(data => {
-        this.loading.dismissAll();
-
-      }, err => {
-        this.loading.dismissAll()
-        this.presentToast('Error while uploading file.');
-      });
-    });
-
-    let p = Object.assign({}, this.issue, this.issueForm.value, this.role1);
-    const body = { issue: p };
-    this.insertData(body);
+        // Use the FileTransfer to upload the image
+        fileTransfer.upload(targetPath, url, options).then(data => {
+          console.log('in filetransfer upload');
+          // if (++count == max) {
+          //   this.loading.dismissAll();
+          // }
+        },
+          //  this.upservice.makeFileRequest('http://localhost/issue_register/api/insert_docs', id,options).subscribe(() => {
+  
+          //  console.log('sent');
+  
+          //  });
+          err => {
+            //  if(this.loading) {
+            //   this.loading.dismissAll()
+            // }
+            // this.presentToast('Error while uploading file.' + err);
+          }
+        );
+      }
+      
+      
+       
+    // }
+  );
   }
 
   selStataus(event) {
@@ -580,7 +638,7 @@ export class NewIssuePage {
   }
 
   getImagesbyId() {
-    this._apiService.callApi(AppSettings.getImagesbyId, 'post',{img_id:this.did,reg_no:this._sharedService.reg_no}).subscribe(data => {
+    this._apiService.callApi(AppSettings.getImagesbyId, 'post', { img_id: this.did, reg_no: this._sharedService.reg_no }).subscribe(data => {
       console.log(data);
       this.img_data = data;
     })

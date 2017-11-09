@@ -20,10 +20,10 @@ export class AppSettings {
   // public static issuesListApi = 'http://localhost/issueregister-server/api/issues_list';
   Url: string = 'http://192.168.0.109/issue_register/api/';
 
-  // public static uploadUrl = 'http://localhost/issueregister-server/upload/upload';
-  public static uploadUrl = 'http://localhost/issue_register/api/insert_docs';
-  // public static imageUrl = 'http://localhost/issueregister-server/uploads/';
-  public static imageUrl = 'http://localhost/issue_register/uploads';
+  public static uploadUrl = 'http://192.168.0.109/issue_register/upload/upload';
+  //  public static uploadUrl = 'http://localhost/issue_register/api/insert_docs';
+  public static imageUrl = 'http://localhost/issueregister-server/uploads/';
+  // public static imageUrl = 'http://localhost/issue_register/uploads';
   // public static newIssueApi = 'http://localhost/issueregister-server/api/insert_data';
   // public static issuesListApi = 'http://localhost/issueregister-server/api/issues_list';
   // public static getIssueApi = 'http://localhost/issueregister-server/api/get_issue';
@@ -32,15 +32,13 @@ export class AppSettings {
   // public static deleteApi = 'http://localhost/issueregister-server/api/delete_issue';
   public static forgetPasswordApi = 'http://localhost/issueregister-srver/api/forget_password';
 
-  //new
+  // new apis
   public static loginApi: string = 'http://210.16.79.137/raghuerp/server/api/validLogin';
   public static newIssueApi: string = 'http://192.168.0.109/issue_register/api/insert_data';
-  // public static  issuesListApi: string = 'http://192.168.0.109/issue_register/api/getissue';
   public static getIssueApi = 'http://192.168.0.109/issue_register/api/get_issue';
   public static GETROLE_API = 'http://192.168.0.109/issue_register/api/getRole';
   public static issuesListApi = 'http://192.168.0.109/issue_register/api/issues_list';
   public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissuesforuser';
-  // public static getissuesforuser = 'http://192.168.0.109/issue_register/api/getissue';
   public static deleteApi = 'http://192.168.0.109/issue_register/api/DELETEISSUE';
   public static Toresolutionprogress ='http://192.168.0.109/issue_register/api/Toresolutionprogress';
 
@@ -52,6 +50,7 @@ export class AppSettings {
 
   public static getdetails = 'http://192.168.0.109/issue_register/api/GETDETAILS';
   public static getImagesbyId = 'http://192.168.0.109/issue_register/api/getImagesbyId';
+  public static deleteimage ='http://192.168.0.109/issue_register/api/deleteimages';
   
 
 
@@ -84,4 +83,29 @@ export class AppSettings {
 
 
   ];
+
+
+
+
+///queries for server 210.16.79.137/
+
+  // public static loginApi: string = 'http://210.16.79.137/raghuerp/server/api/validLogin';
+  // public static newIssueApi: string = 'http://210.16.79.137/raghuerp/issueregister/server/api/insert_data';
+  // public static getIssueApi = 'http://210.16.79.137/raghuerp/issueregister/server/api/get_issue';
+  // public static GETROLE_API = 'http://210.16.79.137/raghuerp/issueregister/server/api/getRole';
+  // public static issuesListApi = 'http://210.16.79.137/raghuerp/issueregister/server/api/issues_list';
+  // public static getissuesforuser = 'http://210.16.79.137/raghuerp/issueregister/server/api/getissuesforuser';
+  // public static deleteApi = 'http://210.16.79.137/raghuerp/issueregister/server/api/DELETEISSUE';
+  // public static Toresolutionprogress ='http://210.16.79.137/raghuerp/issueregister/server/api/Toresolutionprogress';
+
+  // public static  getStaffData: string = 'http://210.16.79.137/raghuerp/server/api/getStaffData';
+  // public static INSERTISSUE ='http://210.16.79.137/raghuerp/issueregister/server/api/INSERTISSUE';
+  // public static modifyIssue ='http://210.16.79.137/raghuerp/issueregister/server/api/modifyIssue';
+  // public static UPDATEISSUE = 'http://210.16.79.137/raghuerp/issueregister/server/api/UPDATEISSUE';
+  // public static  resolutioninprogress = 'http://210.16.79.137/raghuerp/issueregister/server/api/RESOLUTIONINPROGRESS';
+
+  // public static getdetails = 'http://210.16.79.137/raghuerp/issueregister/server/api/GETDETAILS';
+  // public static getImagesbyId = 'http://210.16.79.137/raghuerp/issueregister/server/api/getImagesbyId';
+  // public static deleteimage ='http://210.16.79.137/raghuerp/issueregister/server/api/deleteimages';
+  // public static uploadUrl = 'http://210.16.79.137/raghuerp/issueregister/server/upload/upload';
 } 

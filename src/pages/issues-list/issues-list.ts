@@ -122,7 +122,6 @@ export class IssuesListPage {
       .subscribe(data => {
      
         if (data.success) {
-          console.log(JSON.stringify(data.data));
           this.categories1 = [];
           this.issuesList1 = [];
           let category1;

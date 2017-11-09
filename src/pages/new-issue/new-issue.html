@@ -81,16 +81,17 @@
                 </button>
             </ion-item>
 
-            <ion-list *ngIf="did > 0 && editImages.length">
+            <ion-list *ngIf="did > 0">
                 <!-- <ion-item *ngFor="let image of editImages"> -->
                       <ion-item *ngFor="let image of img_data">
                     <button ion-button icon-only (click)="removeImage(image, 'edit')">
                         <ion-icon name="close"></ion-icon>
                     </button>
-                    <img src="{{img_url}}/{{img.img_name}}" style="width: 100%">
+                    <img src="{{img_url}}/{{image.img_name}}" style="width: 100%" height ="350px">
                 </ion-item>
             </ion-list>
 
+            
             <ion-list *ngIf="images.length">
                 <ion-item *ngFor="let image of images">
                     <button ion-button icon-only (click)="removeImage(image, 'new')">
@@ -101,10 +102,7 @@
             </ion-list>
 
         </ion-list>
-        <button *ngIf="!did" type="submit" (click)="save()" ion-button block>Submit Issue</button>
-        <button *ngIf="did > 0" type="submit" (click)="save()" ion-button block>Update Issue</button>
+        <button *ngIf="!did" type="submit" (click)="insertData()" ion-button block>Submit Issue</button>
+        <button *ngIf="did > 0" type="submit" (click)="insertData()" ion-button block>Update Issue</button>
     </form>
-
-
-    <!--<img src="{{pathForImage(lastImage)}}" style="width: 100%">-->
 </ion-content>

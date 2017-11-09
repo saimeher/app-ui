@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { MyApp } from './app.component';
 import { WelcomePage, RegisterPage, NewIssuePage, IssuesListPage, IssueDetailPage, IssuesTabsPage, IssuesListClosedPage, IssuesListInProgressPage,IssuesListUsdeletedPage,IssuesListVerifiedPage,IssuesListCannotbePage,IssuesListAssignedPage,IssuesListOnholdPage,CaretakeradminPage,CaretakerlistPage,ResolutionProgressPage,ResolutionPage,PendingListPage, ClosedListPage } from '../pages/pages';
 import { ApiService, DeviceService, SharedService, DateToIso } from '../common/common';
+import { UploadService } from '../common/uploadservice';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ ClosedListPage,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ApiService,
     DeviceService,
-    SharedService
+    SharedService,
+    UploadService,
   ]
 })
 export class AppModule { }
